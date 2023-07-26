@@ -1,0 +1,1180 @@
+openapi: 3.0.3
+info:
+  description: User Spec Open API
+  version: '1.0.0'
+  title: User Spec Open API
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - url: '{protocol}://{environment}.sphereon.io/{projectName}/v1'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      environment:
+        default: api.vdp
+      projectName:
+        default: user-service
+        description: User Service API
+
+paths:
+  /:
+    post:
+      tags:
+        - Realms
+      summary: Save the realm.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RealmCreateOrUpdate'
+        required: true
+      responses:
+        201:
+          description: Successfully created a realm.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealmResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+  /{realmId}:
+    get:
+      tags:
+        - Realms
+      summary: Get the realm. It will not include nested information like User.
+      parameters:
+        - name: expand
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Expands'
+      responses:
+        200:
+          description: Successfully fetched the realm.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealmResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+    put:
+      tags:
+        - Realms
+      summary: Update the information of the realm. Any groups, users or roles information in the representation will be ignored.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RealmCreateOrUpdate'
+        required: true
+      responses:
+        200:
+          description: Successfully updated the realm.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealmResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+    delete:
+      tags:
+        - Realms
+      summary: Delete the realm
+      responses:
+        200:
+          description: Successfully deleted the realm.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+        409:
+          description: 'Conflict: There are groups and/or users associated with this realm.'
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+  /{realmId}/groups:
+    get:
+      tags:
+        - Groups
+      summary: Get groups for a specific realm.
+      parameters:
+        - name: pageable
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PageRequest'
+        - name: expand
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Expands'
+      responses:
+        200:
+          description: Successfully fetched groups.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupsResponse'
+        206:
+          description: Successfully fetched groups.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupsResponse'
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+        416:
+          description: Range not satisfiable.
+    post:
+      tags:
+        - Groups
+      summary: Create a group for a specific realm.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreate'
+        required: true
+      responses:
+        201:
+          description: Successfully created a group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+  /{realmId}/groups/{groupId}:
+    get:
+      tags:
+        - Groups
+      summary: Get a specific group for a specific realm.
+      parameters:
+        - name: expand
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Expands'
+      responses:
+        # determine how to handle users here
+        200:
+          description: Successfully fetched the group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm and/or group does not exist.
+    put:
+      tags:
+        - Groups
+      summary: Update the information of the group. Any user information in the representation will be ignored.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupUpdate'
+        required: true
+      responses:
+        200:
+          description: Successfully updated the group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm and/or group does not exist.
+    delete:
+      tags:
+        - Groups
+      summary: Delete a specific group.
+      responses:
+        200:
+          description: Successfully deleted the group.
+        404:
+          description: Realm and/or group does not exist.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+      - $ref: '#/components/parameters/groupId'
+  /{realmId}/groups/{groupId}/roles:
+    put:
+      tags:
+        - Groups
+      summary: Add or remove roles from group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        200:
+          description: Successfully added or removed roles from group.
+        404:
+          description: Realm and/or group and/or role does not exist.
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+      - $ref: '#/components/parameters/groupId'
+  /{realmId}/users:
+    get:
+      tags:
+        - Users
+      summary: Get users for a specific realm.
+      parameters:
+        - name: pageable
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PageRequest'
+        - name: userTypes
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/UserTypes'
+        - name: expand
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Expands'
+      responses:
+        200:
+          description: Successfully fetched users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+        206:
+          description: Successfully fetched a page of users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+        416:
+          description: Range not satisfiable.
+    post:
+      tags:
+        - Users
+      summary: Create a user for a specific realm.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateOrUpdate'
+        required: true
+      responses:
+        201:
+          description: Successfully created a user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm group does not exist.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+  /{realmId}/users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Get a specific user for a specific realm.
+      parameters:
+        - name: expand
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Expands'
+      responses:
+        200:
+          description: Successfully fetched the user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm and/or user does not exist.
+    put:
+      tags:
+        - Users
+      summary: Update the information of the user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateOrUpdate'
+        required: true
+      responses:
+        200:
+          description: Successfully updated the user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm and/or user does not exist.
+    delete:
+      tags:
+        - Users
+      summary: Delete a specific user.
+      responses:
+        200:
+          description: Successfully deleted the user.
+        404:
+          description: Realm and/or user does not exist.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+      - $ref: '#/components/parameters/userId'
+  /{realmId}/users/{userId}/roles:
+    put:
+      tags:
+        - Users
+      summary: Add or remove roles from user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        200:
+          description: Successfully added or removed roles from user.
+        404:
+          description: Realm and/or user and/or role does not exist.
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+      - $ref: '#/components/parameters/groupId'
+  /{realmId}/users/{userId}/groups:
+    put:
+      tags:
+        - Users
+      summary: Add or remove group from user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        200:
+          description: Successfully added or removed a group from an user.
+        404:
+          description: Realm and/or user and/or group does not exist.
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+      - $ref: '#/components/parameters/groupId'
+  /{realmId}/roles:
+    get:
+      tags:
+        - Roles
+      summary: Get roles for a specific realm.
+      parameters:
+        - name: pageable
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PageRequest'
+        - name: expand
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Expands'
+      responses:
+        200:
+          description: Successfully fetched groups.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolesResponse'
+        206:
+          description: Successfully fetched a page of roles.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolesResponse'
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+        416:
+          description: Range not satisfiable.
+    post:
+      tags:
+        - Roles
+      summary: Create a role for a specific realm.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreateOrUpdate'
+        required: true
+      responses:
+        201:
+          description: Successfully created a role.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm does not exist.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+  /{realmId}/roles/{roleId}:
+    get:
+      tags:
+        - Roles
+      summary: Get a specific role for a specific realm.
+      parameters:
+        - name: expand
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/Expands'
+      responses:
+        200:
+          description: Successfully fetched the role.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm and/or role does not exist.
+    put:
+      tags:
+        - Roles
+      summary: Update the information of the role.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreateOrUpdate'
+        required: true
+      responses:
+        200:
+          description: Successfully updated the role.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleResponse'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm and/or role does not exist.
+    delete:
+      tags:
+        - Roles
+      summary: Delete a specific role.
+      responses:
+        200:
+          description: Successfully deleted the role.
+        401:
+          description: Unauthorized.
+        404:
+          description: Realm and/or role does not exist.
+    parameters:
+      - $ref: '#/components/parameters/realmId'
+      - $ref: '#/components/parameters/roleId'
+components:
+  securitySchemes:
+    access_token:
+      type: http
+      scheme: bearer
+      # we need to introduce additional properties to almost every object
+  parameters:
+    realmId:
+      name: realmId
+      in: path
+      description: The id of the realm.
+      required: true
+      schema:
+        type: string
+      example: 280fe02a-3b9a-11eb-adc1-0242ac120002
+    groupId:
+      name: groupId
+      in: path
+      description: The id of the group.
+      required: true
+      schema:
+        type: string
+      example: 562fe02a-3b9a-11eb-adc1-0242ac120002
+    userId:
+      name: userId
+      in: path
+      description: The id of the user.
+      required: true
+      schema:
+        type: string
+      example: we1fe02a-3b9a-11eb-adc1-0242ac120002
+    roleId:
+      name: roleId
+      in: path
+      description: The id of the role.
+      required: true
+      schema:
+        type: string
+      example: 781fe02a-3b9a-11eb-adc1-0242ac120002
+  schemas:
+    Expand:
+      type: string
+      description: Which entity to expand
+      enum:
+        - group
+        - role
+        - user
+    UserTypes:
+      type: array
+      description: Which types to include
+      items:
+        $ref: '#/components/schemas/UserType'
+    UserType:
+      type: string
+      description: Determines the type of the user
+      enum:
+        - internal
+        - external
+      example: internal
+    Expands:
+      type: array
+      description: Which entites to expand
+      items:
+        $ref: '#/components/schemas/Expand'
+    PageRequest:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+          example: 3
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+          example: 50
+        sort:
+          type: array
+          items:
+            type: string
+            example: "createdAt,DESC"
+      example:
+        page: 3
+        size: 50
+        sort:
+          - createdAt,DESC
+    Sortable:
+      type: object
+      properties:
+        empty:
+          type: boolean
+          example: false
+        sorted:
+          type: boolean
+          example: true
+        unsorted:
+          type: boolean
+          example: false
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+          example: 100
+        pageNumber:
+          type: integer
+          format: int32
+          example: 3
+        pageSize:
+          type: integer
+          format: int32
+          example: 50
+        paged:
+          type: boolean
+          example: true
+        unpaged:
+          type: boolean
+          example: false
+        last:
+          type: boolean
+          example: false
+        totalPages:
+          type: integer
+          format: int32
+          example: 12
+        totalElements:
+          type: integer
+          format: int64
+          example: 597
+        size:
+          type: integer
+          format: int32
+          example: 50
+        number:
+          type: integer
+          format: int32
+          description: current page number
+          example: 3
+        first:
+          type: boolean
+          example: false
+        numberOfElements:
+          type: integer
+          format: int32
+          example: 50
+        empty:
+          type: boolean
+          example: false
+        sort:
+          $ref: '#/components/schemas/Sortable'
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          description: The street name and number
+        city:
+          type: string
+          description: The city
+        state:
+          type: string
+          description: The state or province
+        postalCode:
+          type: string
+          description: The postal code
+        country:
+          type: string
+          description: The country
+      required:
+        - postalCode
+        - country
+    Company:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the company
+          example: "Sphereon"
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - address
+    Contact:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Jane
+        lastName:
+          type: string
+          example: Doe
+      required:
+        - firstName
+        - lastName
+    GroupCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: admins
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+      required:
+        - name
+      example:
+        name: admins
+        roles:
+          - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
+        users:
+          - id: cdr6e02a-3b9a-11eb-adc1-0242ac120002
+    GroupUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: admins
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+      required:
+        - name
+      example:
+        name: admins
+        roles:
+          - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
+        users:
+          - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003s
+    GroupResponse:
+      type: object
+      description: Group response
+      properties:
+        id:
+          type: string
+          example: 5ac96e2a-06f0-11eb-adc1-0242ac120002
+        name:
+          type: string
+          example: admins
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-01-20T08:13:33Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-01-20T08:13:33Z'
+      required:
+        - id
+        - name
+        - createdAt
+        - updatedAt
+      example:
+        id: 5ac96e2a-06f0-11eb-adc1-0242ac120002
+        name: admins
+        createdAt: '2022-01-20T09:12:28Z'
+        updatedAt: '2022-01-25T14:00:33Z'
+        users:
+          - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
+            username: sph1
+            email: sph1@sphereon.com
+            firstName: Jane
+            lastName: Doe
+            enabled: true
+            createdAt: '2022-01-20T11:12:28Z'
+            updatedAt: '2022-01-25T12:00:33Z'
+    GroupsResponse:
+      type: object
+      properties:
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupResponse'
+      required:
+        - groups
+      example:
+        groups:
+          - id: 5ac96e2a-06f0-11eb-adc1-0242ac120002
+            name: admins
+            createdAt: '2022-01-20T09:12:28Z'
+            updatedAt: '2022-01-25T14:00:33Z'
+            users:
+              - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
+                username: sph1
+                email: sph1@sphereon.com
+                firstName: Jane
+                lastName: Doe
+                enabled: true
+                createdAt: '2022-01-20T11:12:28Z'
+                updatedAt: '2022-01-25T12:00:33Z'
+    RealmResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 7krc96e2a-06f0-11eb-vdc1-0242ac120002
+        editUsernameAllowed:
+          type: boolean
+        enabled:
+          type: boolean
+        loginWithEmailAllowed:
+          type: boolean
+        name:
+          type: string
+          example: example
+        registrationAllowed:
+          type: boolean
+        registrationEmailAsUsername:
+          type: boolean
+        resetPasswordAllowed:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-01-20T08:12:28Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-01-20T08:13:33Z'
+        realmManagementPolicy:
+          type: string
+          description: How we are going to managing this realm.
+          enum:
+            - AZURE
+            - VDX
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupResponse'
+      required:
+        - id
+        - editUsernameAllowed
+        - enabled
+        - loginWithEmailAllowed
+        - name
+        - realmManagementPolicy
+        - registrationAllowed
+        - registrationEmailAsUsername
+        - resetPasswordAllowed
+        - createdAt
+        - updatedAt
+      example:
+        id: 7krc96e2a-06f0-11eb-vdc1-0242ac120002
+        editUsernameAllowed: true
+        enabled: true
+        loginWithEmailAllowed: true
+        name: example
+        registrationAllowed: true
+        registrationEmailAsUsername: true
+        resetPasswordAllowed: true
+        realmManagementPolicy: VDXONIAM
+        createdAt: '2022-01-25T10:01:33Z'
+        updatedAt: '2022-01-25T10:01:33Z'
+    RealmCreateOrUpdate:
+      type: object
+      properties:
+        editUsernameAllowed:
+          type: boolean
+        enabled:
+          type: boolean
+        loginWithEmailAllowed:
+          type: boolean
+        name:
+          type: string
+          example: quarkus
+        registrationAllowed:
+          type: boolean
+        registrationEmailAsUsername:
+          type: boolean
+        resetPasswordAllowed:
+          type: boolean
+        realmManagementPolicy:
+          type: string
+          description: How we are going to managing this realm. CAN NOT be updated.
+          enum:
+            - AZURE
+            - VDX
+      required:
+        - enabled
+        - name
+    RoleCreateOrUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: manager
+        description:
+          type: string
+          example: manager of the company
+      required:
+        - name
+    RoleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ghi6e02a-3b9a-11eb-adc1-0242ac120002
+        name:
+          type: string
+          example: admin
+        description:
+          type: string
+          example: manager of the users
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-01-20T09:14:11Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-01-25T10:01:33Z'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+      required:
+        - id
+      example:
+        id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
+        name: admin
+        description: manager of the users
+        createdAt: '2022-01-20T09:14:11Z'
+        updatedAt: '2022-01-25T10:01:33Z'
+        users:
+          - username: sph1
+            email: sph1@sphereon.com
+            enabled: true
+    RolesResponse:
+      type: object
+      properties:
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+      required:
+        - roles
+      example:
+        pageable:
+          offset: 100
+          pageNumber: 3
+          pageSize: 50
+          paged: true
+          unpaged: false
+          last: false
+          totalPages: 12
+          totalElements: 597
+          size: 50
+          number: 3
+          first: false
+          numberOfElements: 50
+          empty: false
+          sort:
+            empty: false
+            sorted: true
+            unsorted: false
+        roles:
+          - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
+            name: admin
+            description: manager of the users
+            createdAt: '2022-01-20T09:14:11Z'
+            updatedAt: '2022-01-25T10:01:33Z'
+            users:
+              - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
+                username: sph1
+                email: sph1@sphereon.com
+                firstName: Jane
+                lastName: Doe
+                enabled: true
+                createdAt: '2022-01-26T11:02:47Z'
+                updatedAt: '2022-01-26T11:02:47Z'
+    UserCreateOrUpdate:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        enabled:
+          type: boolean
+        type:
+          $ref: '#/components/schemas/UserType'
+        contact:
+          $ref: '#/components/schemas/Contact'
+        company:
+          $ref: '#/components/schemas/Company'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupResponse'
+      required:
+        - username
+        - email
+        - type
+    UserResponse:
+      type: object
+      description: A user response
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        type:
+          $ref: '#/components/schemas/UserType'
+        contact:
+          $ref: '#/components/schemas/Contact'
+        company:
+          $ref: '#/components/schemas/Company'
+        enabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        userRoles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+        groupRoles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupResponse'
+      required:
+        - id
+      example:
+        username: sph1
+        email: sph1@sphereon.com
+        firstName: Jane
+        lastName: Doe
+        enabled: true
+        userRoles:
+          - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
+            name: admin
+            description: manager of the users
+            createdAt: '2022-01-20T09:14:11Z'
+            updatedAt: '2022-01-25T10:01:33Z'
+        groupRoles:
+          - id: rt66e02a-v49a-11cq-adv8-0242ac12mnt5
+            name: developer
+            description: a developer in the org
+            createdAt: '2022-01-20T09:14:11Z'
+            updatedAt: '2022-01-25T10:01:33Z'
+        roles:
+          - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
+            name: admin
+            description: manager of the users
+            createdAt: '2022-01-20T09:14:11Z'
+            updatedAt: '2022-01-25T10:01:33Z'
+          - id: rt66e02a-v49a-11cq-adv8-0242ac12mnt5
+            name: developer
+            description: a developer in the org
+            createdAt: '2022-01-20T09:14:11Z'
+            updatedAt: '2022-01-25T10:01:33Z'
+        groups:
+          - id: 5ac96e2a-06f0-11eb-adc1-0242ac120002
+            name: developers
+            createdAt: '2022-01-20T09:12:28Z'
+            updatedAt: '2022-01-25T14:00:33Z'
+    UsersResponse:
+      type: object
+      properties:
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+      required:
+        - users
+      example:
+        pageable:
+          offset: 100
+          pageNumber: 3
+          pageSize: 50
+          paged: true
+          unpaged: false
+          last: false
+          totalPages: 12
+          totalElements: 597
+          size: 50
+          number: 3
+          first: false
+          numberOfElements: 50
+          empty: false
+          sort:
+            empty: false
+            sorted: true
+            unsorted: false
+        users:
+          - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
+            username: sph1
+            email: sph1@sphereon.com
+            firstName: Jane
+            lastName: Doe
+            enabled: true
+            createdAt: '2022-01-20T11:12:28Z'
+            updatedAt: '2022-01-25T12:00:33Z'
+security:
+  - access_token: []
