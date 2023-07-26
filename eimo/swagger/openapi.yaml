@@ -820,11 +820,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          example: '2022-01-20T08:13:33Z'
+          example: '2023-01-20T08:13:33Z'
         updatedAt:
           type: string
           format: date-time
-          example: '2022-01-20T08:13:33Z'
+          example: '2023-01-20T08:13:33Z'
       required:
         - id
         - name
@@ -833,21 +833,21 @@ components:
       example:
         id: 5ac96e2a-06f0-11eb-adc1-0242ac120002
         name: admins
-        createdAt: '2022-01-20T09:12:28Z'
-        updatedAt: '2022-01-25T14:00:33Z'
+        createdAt: '2023-01-20T09:12:28Z'
+        updatedAt: '2023-01-25T14:00:33Z'
         users:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
             username: sph1
             email: sph1@sphereon.com
             enabled: true
-            createdAt: '2022-01-20T11:12:28Z'
-            updatedAt: '2022-01-25T12:00:33Z'
+            createdAt: '2023-01-20T11:12:28Z'
+            updatedAt: '2023-01-25T12:00:33Z'
         roles:
           - id: 6bf43u1m-32s8-76nh-nro7-6798ve76119
             name: admin
             description: manager of the users
-            createdAt: '2022-01-20T09:14:11Z'
-            updatedAt: '2022-01-25T10:01:33Z'
+            createdAt: '2023-01-20T09:14:11Z'
+            updatedAt: '2023-01-25T10:01:33Z'
     GroupsResponse:
       type: object
       properties:
@@ -863,15 +863,15 @@ components:
         groups:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac120002
             name: admins
-            createdAt: '2022-01-20T09:12:28Z'
-            updatedAt: '2022-01-25T14:00:33Z'
+            createdAt: '2023-01-20T09:12:28Z'
+            updatedAt: '2023-01-25T14:00:33Z'
             users:
               - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
                 username: sph1
                 email: sph1@sphereon.com
                 enabled: true
-                createdAt: '2022-01-20T11:12:28Z'
-                updatedAt: '2022-01-25T12:00:33Z'
+                createdAt: '2023-01-20T11:12:28Z'
+                updatedAt: '2023-01-25T12:00:33Z'
     RealmResponse:
       type: object
       properties:
@@ -896,11 +896,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          example: '2022-01-20T08:12:28Z'
+          example: '2023-01-20T08:12:28Z'
         updatedAt:
           type: string
           format: date-time
-          example: '2022-01-20T08:13:33Z'
+          example: '2023-01-20T08:13:33Z'
         realmManagementPolicy:
           type: string
           description: How we are going to managing this realm.
@@ -937,8 +937,8 @@ components:
         registrationEmailAsUsername: true
         resetPasswordAllowed: true
         realmManagementPolicy: VDXONIAM
-        createdAt: '2022-01-25T10:01:33Z'
-        updatedAt: '2022-01-25T10:01:33Z'
+        createdAt: '2023-01-25T10:01:33Z'
+        updatedAt: '2023-01-25T10:01:33Z'
     RealmCreateOrUpdate:
       type: object
       properties:
@@ -992,11 +992,11 @@ components:
         createdAt:
           type: string
           format: date-time
-          example: '2022-01-20T09:14:11Z'
+          example: '2023-01-20T09:14:11Z'
         updatedAt:
           type: string
           format: date-time
-          example: '2022-01-25T10:01:33Z'
+          example: '2023-01-25T10:01:33Z'
         users:
           type: array
           items:
@@ -1007,8 +1007,8 @@ components:
         id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         name: admin
         description: manager of the users
-        createdAt: '2022-01-20T09:14:11Z'
-        updatedAt: '2022-01-25T10:01:33Z'
+        createdAt: '2023-01-20T09:14:11Z'
+        updatedAt: '2023-01-25T10:01:33Z'
         users:
           - username: sph1
             email: sph1@sphereon.com
@@ -1047,15 +1047,15 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
             name: admin
             description: manager of the users
-            createdAt: '2022-01-20T09:14:11Z'
-            updatedAt: '2022-01-25T10:01:33Z'
+            createdAt: '2023-01-20T09:14:11Z'
+            updatedAt: '2023-01-25T10:01:33Z'
             users:
               - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
                 username: sph1
                 email: sph1@sphereon.com
                 enabled: true
-                createdAt: '2022-01-26T11:02:47Z'
-                updatedAt: '2022-01-26T11:02:47Z'
+                createdAt: '2023-01-26T11:02:47Z'
+                updatedAt: '2023-01-26T11:02:47Z'
     UserCreateOrUpdate:
       type: object
       properties:
@@ -1142,30 +1142,30 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
             name: admin
             description: manager of the users
-            createdAt: '2022-01-20T09:14:11Z'
-            updatedAt: '2022-01-25T10:01:33Z'
+            createdAt: '2023-01-20T09:14:11Z'
+            updatedAt: '2023-01-25T10:01:33Z'
         groupRoles:
           - id: rt66e02a-v49a-11cq-adv8-0242ac12mnt5
             name: developer
             description: a developer in the org
-            createdAt: '2022-01-20T09:14:11Z'
-            updatedAt: '2022-01-25T10:01:33Z'
+            createdAt: '2023-01-20T09:14:11Z'
+            updatedAt: '2023-01-25T10:01:33Z'
         roles:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
             name: admin
             description: manager of the users
-            createdAt: '2022-01-20T09:14:11Z'
-            updatedAt: '2022-01-25T10:01:33Z'
+            createdAt: '2023-01-20T09:14:11Z'
+            updatedAt: '2023-01-25T10:01:33Z'
           - id: rt66e02a-v49a-11cq-adv8-0242ac12mnt5
             name: developer
             description: a developer in the org
-            createdAt: '2022-01-20T09:14:11Z'
-            updatedAt: '2022-01-25T10:01:33Z'
+            createdAt: '2023-01-20T09:14:11Z'
+            updatedAt: '2023-01-25T10:01:33Z'
         groups:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac120002
             name: developers
-            createdAt: '2022-01-20T09:12:28Z'
-            updatedAt: '2022-01-25T14:00:33Z'
+            createdAt: '2023-01-20T09:12:28Z'
+            updatedAt: '2023-01-25T14:00:33Z'
     UsersResponse:
       type: object
       properties:
@@ -1200,10 +1200,8 @@ components:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003
             username: sph1
             email: sph1@sphereon.com
-            firstName: Jane
-            lastName: Doe
             enabled: true
-            createdAt: '2022-01-20T11:12:28Z'
-            updatedAt: '2022-01-25T12:00:33Z'
+            createdAt: '2023-01-20T11:12:28Z'
+            updatedAt: '2023-01-25T12:00:33Z'
 security:
   - access_token: []
