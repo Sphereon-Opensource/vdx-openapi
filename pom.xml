@@ -20,6 +20,8 @@
 
   <modules>
     <module>eimo</module>
+    <module>evco</module>
+    <module>edido</module>
   </modules>
 
   <properties>

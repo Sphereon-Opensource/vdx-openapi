@@ -10,9 +10,24 @@
     <version>2.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>eimo</artifactId>
-  <name>External Identity Management Openapi</name>
-  <description>Verifiable Data Exchange - External Identity Management Openapi.</description>
+  <artifactId>evco</artifactId>
+  <name>External Verifiable Credentials Openapi</name>
+  <description>Verifiable Data Exchange - External Verifiable Credentials Openapi.</description>
+
+  <properties>
+
+    <release_date>2022-08-05 versionOfTheDay 00</release_date>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+    <openapi-codegen-verbose>false</openapi-codegen-verbose>
+    <jackson-databind.version>0.2.1</jackson-databind.version>
+    <springfox-swagger.version>3.0.0</springfox-swagger.version>
+  </properties>
 
   <build>
     <plugins>
@@ -65,10 +80,10 @@
                 <importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
               </importMappings>
 
-              <apiPackage>com.sphereon.vdx.eimo.handler</apiPackage>
-              <modelPackage>com.sphereon.vdx.eimo.model</modelPackage>
+              <apiPackage>com.sphereon.vdx.evco.api</apiPackage>
+              <modelPackage>com.sphereon.vdx.evco.model</modelPackage>
               <artifactVersion>${project.version}</artifactVersion>
-              <invokerPackage>com.sphereon.vdx.eimo.handler</invokerPackage>
+              <invokerPackage>com.sphereon.vdx.evco.handler</invokerPackage>
 
               <artifactVersion>${project.version}</artifactVersion>
               <addCompileSourceRoot>true</addCompileSourceRoot>
@@ -83,11 +98,23 @@
 
               <generateSupportingFiles>true</generateSupportingFiles>
               <enablePostProcessFile>true</enablePostProcessFile>
+              <ignoreFileOverride>${project.basedir}/target/generated-sources/java/api/.swagger-codegen-ignore</ignoreFileOverride>
             </configuration>
           </execution>
         </executions>
       </plugin>
-
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <classesDirectory>target/classes</classesDirectory>
+          <includes>
+            <include>com/sphereon/vdx/evco/api/*</include>
+            <include>com/sphereon/vdx/evco/model/*</include>
+          </includes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <pluginRepositories>

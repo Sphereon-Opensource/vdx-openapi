@@ -1,0 +1,739 @@
+openapi: 3.0.3
+info:
+  title: Verifiable Data Platform - DID Service
+  description: Verifiable Data Platform - DID Service (Compatible with DIF Universal Registrar/Resolver)
+  version: '0.0.1'
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+  contact:
+    email: info@sphereon.com
+
+servers:
+  - url: '{protocol}://{environment}.vdx.sphereon.io:{port}/{projectName}/v1'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      environment:
+        default: api.dev    # Development server
+        enum:
+          - api         # Production server
+          - api.dev     # Development server
+          - api.staging # Staging server
+      projectName:
+        default: did-service
+        description: Verifiable Data Platform - DID Service (Compatible with DIF Universal Registrar/Resolver)
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+paths:
+  /universal-resolver/identifiers/{identifier}:
+    get:
+      operationId: dereferenceOrResolveDID
+      summary: Resolve a DID / dereference a DID URL.
+      description: Returns a DID document or DID URL resolution results.
+      parameters:
+        - in: path
+          required: true
+          name: identifier
+          schema:
+            type: string
+          description: The DID to be resolved, or the DID URL to be dereferenced.
+          examples:
+            example1:
+              value: did:didMethod:builder:VbPQNHsvoLZdaNU7fTBeFx
+              description: A DID using the `didMethod` method.
+            example2:
+              value: did:didMethod:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
+              description: A DID URL with a fragment.
+        - in: header
+          required: false
+          name: Accept
+          schema:
+            type: string
+          description: The requested media type of the DID document representation or DID resolution result.
+          examples:
+            application/did+json:
+              value: application/json
+              description: JSON representation
+            application/did+ld+json:
+              value: application/did+ld+json
+              description: JSON-LD representation
+            application/ld+json;profile=https%3A%2F%2Fw3c-ccg.github.io%2Fdid-resolution%2F:
+              value: application/ld+json;profile=https%3A%2F%2Fw3c-ccg.github.io%2Fdid-resolution%2F
+              description: DID resolution result (JSON-LD representation)
+      responses:
+        '200':
+          description: success
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: The DID document (JSON representation).
+                example:
+                  id: did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx
+                  verificationMethod:
+                    - type: Ed25519VerificationKey2018
+                      id: did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
+                      publicKeyBase58: GasrpJqMo3W9KApN4Dh62cGhYG24xhwNnCgqEKEiTKe6
+                    - type: X25519KeyAgreementKey2019
+                      id: did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-agreement-1
+                      publicKeyBase58: DUmxMDUXFTZLLdxupWFzStfdzh31XgpeoGLFL4ke8AZK
+                  authentication:
+                    - did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
+                  assertionMethod:
+                    - did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
+                  keyAgreement:
+                    - did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-agreement-1
+            application/did+ld+json:
+              schema:
+                type: object
+                description: The DID document (JSON-LD representation).
+                example:
+                  id: did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx
+                  verificationMethod:
+                    - type: Ed25519VerificationKey2018
+                      id: did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
+                      publicKeyBase58: GasrpJqMo3W9KApN4Dh62cGhYG24xhwNnCgqEKEiTKe6
+                    - type: X25519KeyAgreementKey2019
+                      id: did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-agreement-1
+                      publicKeyBase58: DUmxMDUXFTZLLdxupWFzStfdzh31XgpeoGLFL4ke8AZK
+                  authentication:
+                    - did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
+                  assertionMethod:
+                    - did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-1
+                  keyAgreement:
+                    - did:didMethod1:builder:VbPQNHsvoLZdaNU7fTBeFx#key-agreement-1
+            application/ld+json;profile=https%3A%2F%2Fw3c-ccg.github.io%2Fdid-resolution%2F:
+              schema:
+                $ref: '#/components/schemas/ResolutionResult'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+        '500':
+          description: internal server error
+
+  /universal-resolver/properties:
+    get:
+      operationId: getProperties
+      summary: Retrieve configuration properties.
+      description: Returns a map of the configuration properties of the DID Resolver, including of its drivers.
+      responses:
+        '200':
+          description: success
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of properties.
+        '400':
+          description: bad request
+        '500':
+          description: internal server error
+  /universal-resolver/methods:
+    get:
+      operationId: getMethods
+      summary: Retrieve supported DID methods.
+      description: Returns a list of DID methods supported by the DID Resolver.
+      responses:
+        '200':
+          description: success
+          content:
+            application/did+json:
+              schema:
+                type: array
+                items:
+                  type: string
+                description: The list of supported DID methods.
+                example: [ "v1","key" ]
+        '400':
+          description: bad request
+        '500':
+          description: internal server error
+  /universal-resolver/testIdentifiers:
+    get:
+      operationId: getTestIdentifiers
+      summary: Retrieve test identifiers.
+      description: Returns a map of test identifiers that can be resolved by the DID Resolver
+      responses:
+        '200':
+          description: success.
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of test identifiers, grouped by DID method.
+                example:
+                  didMethod1:
+                    - did:didMethod1:xz35-jznz-q9yu-ply
+                    - did:didMethod1:xkrn-xz7q-qsye-28p
+                  didMethod2:
+                    - did:didMethod2:WRfXPg8dantKVubE3HX8pw
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+        '500':
+          description: internal server error
+
+  /universal-registrar/create:
+    post:
+      operationId: createDID
+      summary: Creates a DID.
+      description: Creates a Decentralized Id i.e. DID returns the object.
+      parameters:
+        - in: query
+          required: true
+          name: method
+          schema:
+            type: string
+          description: The requested DID method for the operation.
+          example: key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateState'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+        '500':
+          description: internal server error
+  /universal-registrar/update:
+    post:
+      operationId: updateDID
+      summary: Update a DID.
+      description: Updates a Decentralized Id
+      parameters:
+        - in: query
+          required: true
+          name: method
+          schema:
+            type: string
+          description: The requested DID method for the operation.
+          example: didMethod1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateState'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+        '500':
+          description: internal server error
+  /universal-registrar/deactivate:
+    post:
+      operationId: deactivateDID
+      summary: Deactivate DID.
+      description: Deactivates a DID
+      parameters:
+        - in: query
+          required: true
+          name: method
+          schema:
+            type: string
+          description: The requested DID method for the operation.
+          example: didMethod1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeactivateRequest'
+      responses:
+        '200':
+          description: successfully deactivated!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeactivateState'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+        '500':
+          description: internal server error
+
+  /universal-registrar/properties:
+    get:
+      operationId: getPropertiesUniRegistrar
+      summary: Retrieve configuration properties.
+      description: Returns a map of the configuration properties of the DID Resolver, including of its drivers.
+      responses:
+        '200':
+          description: success
+          content:
+            application/did+json:
+              schema:
+                type: object
+                description: A map of properties.
+        '400':
+          description: bad request
+        '500':
+          description: internal server error
+  /universal-registrar/methods:
+    get:
+      operationId: getMethodsUniRegistrar
+      summary: Retrieve supported DID methods.
+      description: Returns a list of DID methods supported by the DID Resolver.
+      responses:
+        '200':
+          description: success
+          content:
+            application/did+json:
+              schema:
+                type: array
+                items:
+                  type: string
+                description: The list of supported DID methods.
+                example: [ "v1","key" ]
+        '400':
+          description: bad request
+        '500':
+          description: internal server error
+
+  /dids/{did}/associations:
+    post:
+      operationId: createEntityAssociation
+      summary: Creates an association between an entity and a DID
+      description: Creates an association between an entity and a DID and returns the association object
+      parameters:
+        - in: path
+          required: true
+          name: did
+          schema:
+            type: string
+          description: The did associated with the entity
+          example: web:did:localhost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DidEntityAssociationRequest'
+      responses:
+        '202':
+          description: accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DidEntityAssociationResponse'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+        '500':
+          description: internal server error
+
+    get:
+      operationId: listEntityAssociations
+      summary: List the associations between an entity and a DID
+      description: Returns a list of association between an entities and a DIDs
+      parameters:
+        - in: path
+          required: true
+          name: did
+          schema:
+            type: string
+          description: The did associated with the entity
+          example: web:did:localhost
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DidEntityAssociationList'
+        '500':
+          description: internal server error
+  /dids/{did}/associations/{associationId}:
+    put:
+      operationId: updateEntityAssociation
+      summary: Update the association between an entity and a DID
+      description: Updates the association between an entity and a DID
+      parameters:
+        - in: path
+          required: true
+          name: did
+          schema:
+            type: string
+          description: The did associated with the entity
+          example: web:did:localhost
+        - in: path
+          required: true
+          name: associationId
+          schema:
+            type: string
+          description: The association id
+          example: 624d7492c58642554607edd0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DidEntityAssociationRequest'
+      responses:
+        '202':
+          description: accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DidEntityAssociationResponse'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_response'
+        '500':
+          description: internal server error
+
+    delete:
+      operationId: deleteEntityAssociation
+      summary: Deletes the association between an entity and a DID
+      description: Deletes the association between an entity and a DID
+      parameters:
+        - in: path
+          required: true
+          name: did
+          schema:
+            type: string
+          description: The did associated with the entity
+          example: web:did:localhost
+        - in: path
+          required: true
+          name: associationId
+          schema:
+            type: string
+          description: The association id
+          example: 624d7492c58642554607edd0
+      responses:
+        '204':
+          description: no content
+        '500':
+          description: internal server error
+
+components:
+  schemas:
+    AssociationType:
+      description: The type of the Kid with group association creation
+      type: string
+      enum:
+        - DID
+    DidEntityAssociationRequest:
+      title: DID with entity association object
+      description: Data object containing information about the DID association with the entity
+      type: object
+      additionalProperties: false
+      properties:
+        entity:
+          description: The entity that should be associated with the DID
+          type: string
+          example: finance
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+        kid:
+          description: The key id of the DID
+          type: string
+          example: did:web:mydomain.com#key-1
+        type:
+          $ref: '#/components/schemas/AssociationType'
+    DidEntityAssociationResponse:
+      title: DID with entity association object
+      description: Data object containing information about the DID association with the entity
+      type: object
+      additionalProperties: false
+      properties:
+        did:
+          description: The DID to associate with the entity
+          type: string
+          example: did:web:mydomain.com
+        entity:
+          description: The entity that should be associated with the DID
+          type: string
+          example: finance
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+        kid:
+          description: The key id of the DID
+          type: string
+          example: did:web:mydomain.com#key-1
+        type:
+          $ref: '#/components/schemas/AssociationType'
+    DidEntityAssociationList:
+      title: DID with entity association list
+      description: List of associations between entities and DIDs
+      type: array
+      items:
+        $ref: '#/components/schemas/DidEntityAssociationResponse'
+    CreateRequest:
+      title: Create request object
+      description: Data object containing information to request creation of DID.
+      type: object
+      additionalProperties: false
+      properties:
+        jobId:
+          description: Id of an ongoing DID creation process.
+          type: string
+          example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
+        options:
+          description: Options for the DID create operation, such as the network where the DID should be created
+          type: object
+          additionalProperties: true
+          properties:
+            publicKey:
+              description: Public key.
+              type: string
+            keyResponseMode:
+              $ref: '#/components/schemas/keyResponseMode'
+          example:
+            chain: "testnet"
+        secret:
+          description: Object with DID controller keys and other secrets needed for performing the DID create operation.
+          type: object
+          example:
+            seed: "72WGp7NgFR1Oqdi8zlt7jQQ434XR0cNQ"
+        didDocument:
+          description: Partial or complete DID document
+          type: object
+    CreateState:
+      title: Create DID result
+      description: The state after a create operation.
+      type: object
+      additionalProperties: false
+      required:
+        - didState
+      properties:
+        jobId:
+          type: string
+          example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
+        didState:
+          $ref: '#/components/schemas/DidState'
+        didRegistrationMetadata:
+          type: object
+        didDocumentMetadata:
+          type: object
+    DeactivateRequest:
+      title: Deactivate request object
+      description: Data object containing information to request deactivation of DID.
+      type: object
+      additionalProperties: false
+      required:
+        - did
+      properties:
+        jobId:
+          description: Id of an ongoing DID creation process.
+          type: string
+          example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
+        did:
+          description: DID to be deactivated.
+          type: string
+          example: "did:didMethod1:WRfXPg8dantKVubE3HX8pw"
+        options:
+          description: Options for the DID deactivate operation.
+          type: object
+        secret:
+          description: Object with DID controller keys and other secrets needed for performing the DID deactivate operation.
+          type: object
+    DeactivateState:
+      title: Deactivate DID result
+      description: The state after a deactivate operation.
+      type: object
+      additionalProperties: false
+      required:
+        - didState
+      properties:
+        jobId:
+          type: string
+          example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
+        didState:
+          $ref: '#/components/schemas/DidState'
+        didRegistrationMetadata:
+          type: object
+        didDocumentMetadata:
+          type: object
+    DidState:
+      title: DID's current state
+      description: The info object to describe the state of the DID.
+      type: object
+      additionalProperties: true
+      properties:
+        state:
+          type: string
+          example: "finished"
+        did:
+          type: string
+          example: "did:didMethod1:WRfXPg8dantKVubE3HX8pw"
+        secret:
+          type: object
+          example:
+            keys:
+              - privateKeyJwk:
+                  kty: OKP
+                  d: NzJXR3A3TmdGUjFPcWRpOHpsdDdqUVE0MzRYUjBjTlE
+                  crv: Ed25519
+                  x: jpIKKU2b77lNXKTNW2NGvw1GUMjU6v_l_tLJAH5uYz0
+                publicKeyDIDURL: did:didMethod1:WRfXPg8dantKVubE3HX8pw#key-1
+    EntityType:
+      description: The type of the entity to be associated with a DID
+      type: string
+      enum:
+        - GROUP
+        - USER
+    issue:
+      title: Issue
+      description: This is the warning and error.
+      type: object
+      properties:
+        code:
+          type: string
+          description: Uniquely identifying key-code to pin point the issue that has occurred.
+        tag:
+          type: string
+          description: The object or part of object for which the issue has occurred.
+        message:
+          type: string
+          description: The details of the issue in a human readable text.
+        status:
+          $ref: '#/components/schemas/status'
+      required:
+        - code
+        - tag
+        - message
+        - status
+      additionalProperties: false
+    keyResponseMode:
+      title: Key response mode.
+      description: The mode by which we determine which keys to reveal in the response.
+      enum:
+        - NONE # The user has requested server NOT to return the keys.
+        - KEY_PAIR # The user has requested server to return the private and public keys.
+        - PUBLIC_KEY_ONLY # The user has requested server to return the public key.
+    ResolutionResult:
+      description: The DID resolution result.
+      type: object
+      additionalProperties: false
+      properties:
+        didDocument:
+          type: object
+          example:
+            '@context': https://www.w3.org/ns/did/v1
+            id: did:didMethod1:WRfXPg8dantKVubE3HX8pw
+            verificationMethod:
+              - id: did:didMethod1:WRfXPg8dantKVubE3HX8pw#key-1
+                type: Ed25519VerificationKey2018
+                publicKeyBase58: H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV
+        didResolutionMetadata:
+          type: object
+        didDocumentMetadata:
+          type: object
+    status:
+      type: string
+      title: Status
+      description: This is the over all status or the status of the most significant item.
+      enum:
+        - SUCCESS
+        - WARN
+        - ERROR
+    status_response:
+      title: Generic Response
+      description: This is a generic wrapper to contain the info, warnings and errors.
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/status'
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/issue'
+      required:
+        - status
+        - issues
+      additionalProperties: false
+    UpdateRequest:
+      title: Update request object.
+      description: Data object containing information to request update of DID.
+      type: object
+      additionalProperties: false
+      required:
+        - did
+      properties:
+        jobId:
+          description: Id of an ongoing DID creation process.
+          type: string
+          example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
+        did:
+          description: DID to be updated.
+          type: string
+          example: "did:didMethod1:WRfXPg8dantKVubE3HX8pw"
+        options:
+          description: Options for the DID update operation.
+          type: object
+          additionalProperties: true
+          properties:
+            publicKey:
+              description: Public key.
+              type: string
+            keyResponseMode:
+              $ref: '#/components/schemas/keyResponseMode'
+        secret:
+          description: Object with DID controller keys and other secrets needed to perform the DID update operation.
+          type: object
+        didDocument:
+          description: Partial or whole DID document
+          type: object
+        management:
+          enum:
+            - SERVER-MANAGED # The server will create private and public key but only reveal the public key.
+            - USER-MANAGED # The server will create private and public key and will return the private key along with public key.
+            - USER-CREATED # The user has already created the keys and sent only the public key that we need to persist in server. We may need to remove/deactivate the private key.
+    UpdateState:
+      title: Update state object.
+      description: The state after an update operation.
+      type: object
+      additionalProperties: false
+      required:
+        - didState
+      properties:
+        jobId:
+          type: string
+          example: 6d85bcd0-2ea3-4288-ab00-15afadd8a156
+        didState:
+          $ref: '#/components/schemas/DidState'
+        didRegistrationMetadata:
+          type: object
+        didDocumentMetadata:
+          type: object
