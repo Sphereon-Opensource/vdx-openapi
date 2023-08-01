@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  description: User Spec Open API
+  description: External Identity Management Openapi from Verifiable Data Exchange
   version: '1.0.0'
-  title: User Spec Open API
+  title: External Identity Management Openapi
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
@@ -16,10 +16,10 @@ servers:
           - https
         default: https
       environment:
-        default: api.vdp
+        default: api.vdx
       projectName:
-        default: user-service
-        description: User Service API
+        default: eimo
+        description: External Identity Management Openapi
 
 paths:
   /:
@@ -604,13 +604,6 @@ components:
       enum:
         - internal
         - external
-    ProfileType:
-      type: string
-      description: Specifies the class of the user
-      enum:
-        - company
-        - contact
-      example: company
     Expands:
       type: array
       description: Which entites to expand
@@ -704,57 +697,6 @@ components:
           example: false
         sort:
           $ref: '#/components/schemas/Sortable'
-    Address:
-      type: object
-      properties:
-        street:
-          type: string
-          description: The street name and number
-        city:
-          type: string
-          description: The city
-        state:
-          type: string
-          description: The state or province
-        postalCode:
-          type: string
-          description: The postal code
-        country:
-          type: string
-          description: The country
-      required:
-        - postalCode
-        - country
-      example:
-        street: Bisonspoor
-        city: Maarssen
-        state: Utrecht
-        postalCode: "3605 LT"
-        country: "The Netherlands"
-    Company:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the company
-          example: "Sphereon"
-        address:
-          $ref: '#/components/schemas/Address'
-      required:
-        - name
-        - address
-    Contact:
-      type: object
-      properties:
-        firstName:
-          type: string
-          example: Jane
-        lastName:
-          type: string
-          example: Doe
-      required:
-        - firstName
-        - lastName
     GroupCreate:
       type: object
       properties:
@@ -1067,10 +1009,6 @@ components:
           type: boolean
         type:
           $ref: '#/components/schemas/UserType'
-        contact:
-          $ref: '#/components/schemas/Contact'
-        company:
-          $ref: '#/components/schemas/Company'
         roles:
           type: array
           items:
@@ -1095,12 +1033,6 @@ components:
           type: string
         type:
           $ref: '#/components/schemas/UserType'
-        profileType:
-          $ref: '#/components/schemas/ProfileType'
-        contact:
-          $ref: '#/components/schemas/Contact'
-        company:
-          $ref: '#/components/schemas/Company'
         enabled:
           type: boolean
         createdAt:
@@ -1128,15 +1060,6 @@ components:
       example:
         username: sph1
         email: sph1@sphereon.com
-        profileType: company
-        company:
-          name: Sphereon
-          address:
-            street: Bisonspoor
-            city: Maarssen
-            state: Utrecht
-            postalCode: "3605 LT"
-            country: "The Netherlands"
         enabled: true
         userRoles:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002

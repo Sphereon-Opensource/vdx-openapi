@@ -7,7 +7,7 @@
   <parent>
     <groupId>com.sphereon.vdx</groupId>
     <artifactId>vdx-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>evco</artifactId>
@@ -15,9 +15,6 @@
   <description>Verifiable Data Exchange - External Verifiable Credentials Openapi.</description>
 
   <properties>
-
-    <release_date>2022-08-05 versionOfTheDay 00</release_date>
-
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <java.version>11</java.version>
@@ -64,7 +61,7 @@
             <phase>generate-sources</phase>
             <configuration>
               <!-- this is a slightly modified version of the spec from the link below, to fix some issues we have not resolved in the VC HTTP API -->
-              <inputSpec>${project.basedir}/swagger/openapi.yaml</inputSpec>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
 
               <!-- This is version 1.2.0 of the Sphereon VC HTTP API -->
               <!--<inputSpec>https://raw.githubusercontent.com/Sphereon-Opensource/vc-http-api/d65c5df78721f110edea1e121c5a1dda0b53ea14/src/resources/swagger/vc-http-api.yaml</inputSpec>-->

@@ -14,8 +14,8 @@
   <groupId>com.sphereon.vdx</groupId>
   <artifactId>vdx-parent</artifactId>
   <name>Verifiable Data Exchange Parent Project</name>
-  <description>Verifiable Data Exchange Parent Project</description>
-  <version>2.0.0-SNAPSHOT</version>
+  <description>The parent project for Verifiable Data Exchange Openapi modules</description>
+  <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -41,18 +41,18 @@
   <distributionManagement>
     <repository>
       <id>sphereon-opensource-releases</id>
-      <url>https://nexus.qa.sphereon.com/nexus/content/repositories/sphereon-opensource-releases</url>
+      <url>https://nexus.qa.sphereon.com/repository/sphereon-opensource-releases</url>
     </repository>
     <snapshotRepository>
       <id>sphereon-opensource-snapshots</id>
-      <url>https://nexus.qa.sphereon.com/nexus/content/repositories/sphereon-opensource-snapshots</url>
+      <url>https://nexus.sphereon.com/repository/sphereon-opensource-snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
   <scm>
-    <connection>scm:git:git@github.com:Sphereon/vdp-user-service-openapi.git</connection>
-    <developerConnection>scm:git:git@github.com:Sphereon/vdp-user-service-openapi.git</developerConnection>
-    <url>https://github.com/Sphereon/vdp-user-service-openapi</url>
+    <connection>scm:git:git@github.com:Sphereon/Sphereon-Opensource/vdx-openapi.git</connection>
+    <developerConnection>scm:git:git@github.com:Sphereon-Opensource/vdx-openapi.git</developerConnection>
+    <url>https://github.com/Sphereon-Opensource/vdx-openapi</url>
   </scm>
 
   <repositories>

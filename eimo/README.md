@@ -2,14 +2,14 @@
   <br>
   <a href="https://www.sphereon.com"><img src="https://sphereon.com/content/themes/sphereon/assets/img/logo.svg" alt="Sphereon" width="400"></a>
     <br>VDX : Verifiable Data Exchange 
-    <br>IMO : Identity Management Openapi
+    <br>EIMO : External Identity Management Openapi
   <br>
 </h1>
 
 
 ## User Spec Open API
 
-This is version 1.0.0 of Sphereon's Verifiable Data Platform (vdp for short). This Spec contains CRUD operations for the following entities:
+This is version 1.0.0 of Sphereon's Verifiable Data Exchange (vdx for short) platform. This Spec contains CRUD operations for the following entities:
 - Realms
 - Users
 - Groups

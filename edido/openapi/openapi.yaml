@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Verifiable Data Platform - DID Service
-  description: Verifiable Data Platform - DID Service (Compatible with DIF Universal Registrar/Resolver)
+  title: External DID Service Openapi
+  description: External DID Service Openapi (Compatible with DIF Universal Registrar/Resolver) from Verifiable Data Exchange
   version: '0.0.1'
   license:
     name: Apache 2.0
@@ -24,8 +24,8 @@ servers:
           - api.dev     # Development server
           - api.staging # Staging server
       projectName:
-        default: did-service
-        description: Verifiable Data Platform - DID Service (Compatible with DIF Universal Registrar/Resolver)
+        default: edido
+        description: External DID Openapi (Compatible with DIF Universal Registrar/Resolver) from Verifiable Data Exchange
       port:
         enum:
           - '443'
@@ -518,7 +518,7 @@ components:
               description: Public key.
               type: string
             keyResponseMode:
-              $ref: '#/components/schemas/keyResponseMode'
+              $ref: '#/components/schemas/KeyResponseMode'
           example:
             chain: "testnet"
         secret:
@@ -635,8 +635,8 @@ components:
         - message
         - status
       additionalProperties: false
-    keyResponseMode:
-      title: Key response mode.
+    KeyResponseMode:
+      title: Key response mode
       description: The mode by which we determine which keys to reveal in the response.
       enum:
         - NONE # The user has requested server NOT to return the keys.
@@ -708,7 +708,7 @@ components:
               description: Public key.
               type: string
             keyResponseMode:
-              $ref: '#/components/schemas/keyResponseMode'
+              $ref: '#/components/schemas/KeyResponseMode'
         secret:
           description: Object with DID controller keys and other secrets needed to perform the DID update operation.
           type: object
