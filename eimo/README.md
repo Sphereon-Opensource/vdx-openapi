@@ -15,25 +15,6 @@ This is version 0.1.0 of Sphereon's Verifiable Data Exchange (vdx for short) pla
 - Groups
 - Roles
 
-## Releasing new version
-#### Step A : Recreate the SDK
-
-```
-mvn clean install
-```
-
-#### only after making sure all the changes are there you can publish into our nexus
-
-#### Step B : Release the SDK
-
-If you have the correct settings in your local workspace, you can easily publish a new version on Sphereon repository (`sphereon-opensource-snapshots`)
-if you do, you can create and upload a new version with running:
-
-```
-mvn clean deploy
-```
-This will publish the jar result of this project in our nexus server.
-
 ## Operations:
 
 ### Realms:
@@ -114,6 +95,26 @@ DELETE
 | userId   | path  | string |                      | we1fe02a-b89d                                             |
 | groupId  | path  | string |                      | 562fe02a-l79l                                             |
 | pageable | query | object |                      | `page=3&size=50&sort=createdAt,DESC` |
+
+
+## Releasing new version
+#### Step A : Recreate the SDK
+
+```
+mvn clean install
+```
+
+#### only after making sure all the changes are there you can publish into our nexus
+
+#### Step B : Release the SDK
+
+If you have the correct settings in your local workspace, you can easily publish a new version on Sphereon repository (`sphereon-opensource-snapshots`)
+if you do, you can create and upload a new version with running:
+
+```
+mvn clean deploy
+```
+This will publish the jar result of this project in our nexus server.
 
 ## Further info
 For further information you can view the actual openapi yaml file.
