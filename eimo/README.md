@@ -7,9 +7,9 @@
 </h1>
 
 
-## User Spec Open API
+## External Identity Management Openapi
 
-This is version 1.0.0 of Sphereon's Verifiable Data Exchange (vdx for short) platform. This Spec contains CRUD operations for the following entities:
+This is version 0.1.0 of Sphereon's Verifiable Data Exchange (vdx for short) platform. This Spec contains CRUD operations for the following entities:
 - Realms
 - Users
 - Groups
