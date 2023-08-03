@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: "0.0.3-unstable"
+  version: "0.1.0"
   title: External VC (issuer/verifier) Openapi
   description: This is an Experimental Open API Specification for the [VC Data Model](https://www.w3.org/TR/vc-data-model/).
   license:
@@ -9,6 +9,30 @@ info:
   contact:
     name: GitHub Source Code
     url: https://github.com/w3c-ccg/vc-api
+
+servers:
+  - url: '{protocol}://{environment}.vdx.sphereon.io:{port}/{projectName}/v1'
+    variables:
+      protocol:
+        default: https
+        enum:
+          - http
+          - https
+      environment:
+        default: api.dev    # Development server
+        enum:
+          - api         # Production server
+          - api.dev     # Development server
+          - api.staging # Staging server
+      projectName:
+        default: evco
+        description: This is an Experimental Open API Specification for the [VC Data Model](https://www.w3.org/TR/vc-data-model/).
+      port:
+        default: '443'
+        enum:
+          - '443'
+          - '8443'
+
 paths:
   /credentials/issue:
     post:

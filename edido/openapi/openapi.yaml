@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: External DID Service Openapi
   description: External DID Service Openapi (Compatible with DIF Universal Registrar/Resolver) from Verifiable Data Exchange
-  version: '0.0.1'
+  version: '0.1.0'
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
@@ -13,10 +13,10 @@ servers:
   - url: '{protocol}://{environment}.vdx.sphereon.io:{port}/{projectName}/v1'
     variables:
       protocol:
+        default: https
         enum:
           - http
           - https
-        default: https
       environment:
         default: api.dev    # Development server
         enum:
@@ -27,10 +27,10 @@ servers:
         default: edido
         description: External DID Openapi (Compatible with DIF Universal Registrar/Resolver) from Verifiable Data Exchange
       port:
+        default: '443'
         enum:
           - '443'
           - '8443'
-        default: '443'
 
 paths:
   /universal-resolver/identifiers/{identifier}:

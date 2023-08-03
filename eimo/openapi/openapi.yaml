@@ -1,25 +1,34 @@
 openapi: 3.0.3
 info:
   description: External Identity Management Openapi from Verifiable Data Exchange
-  version: '1.0.0'
+  version: '0.1.0'
   title: External Identity Management Openapi
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
 
 servers:
-  - url: '{protocol}://{environment}.sphereon.io/{projectName}/v1'
+  - url: '{protocol}://{environment}.vdx.sphereon.io:{port}/{projectName}/v1'
     variables:
       protocol:
+        default: https
         enum:
           - http
           - https
-        default: https
       environment:
-        default: api.vdx
+        default: api.dev
+        enum:
+          - api         # Production server
+          - api.dev     # Development server
+          - api.staging # Staging server
       projectName:
         default: eimo
         description: External Identity Management Openapi
+      port:
+        default: '443'
+        enum:
+          - '443'
+          - '8443'
 
 paths:
   /:
