@@ -22,6 +22,7 @@
     <module>eimo</module>
     <module>evco</module>
     <module>edido</module>
+    <module>ecmo</module>
   </modules>
 
   <properties>

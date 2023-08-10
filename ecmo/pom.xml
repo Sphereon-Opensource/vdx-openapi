@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.sphereon.vdx</groupId>
+    <artifactId>vdx-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>ecmo</artifactId>
+  <name>External Contact Manager Openapi</name>
+  <description>Verifiable Data Exchange - External Contact Manager Openapi.</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+    <openapi-codegen-verbose>false</openapi-codegen-verbose>
+    <jackson-databind.version>0.2.1</jackson-databind.version>
+    <springfox-swagger.version>3.0.0</springfox-swagger.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapi-generator-version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>io.swagger.parser.v3</groupId>
+            <artifactId>swagger-parser</artifactId>
+            <version>2.0.5</version>
+          </dependency>
+          <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson-datatype-jsr310.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>generate-sources</phase>
+            <configuration>
+              <!-- this is a slightly modified version of the spec from the link below, to fix some issues we have not resolved in the VC HTTP API -->
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+
+              <generatorName>java</generatorName>
+              <!-- Java11+ native client -->
+              <library>native</library>
+
+              <typeMappings>
+                <typeMapping>OffsetDateTime=Instant</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
+              </importMappings>
+
+              <apiPackage>com.sphereon.vdx.ecmo.api</apiPackage>
+              <modelPackage>com.sphereon.vdx.ecmo.model</modelPackage>
+              <artifactVersion>${project.version}</artifactVersion>
+              <invokerPackage>com.sphereon.vdx.ecmo.handler</invokerPackage>
+
+              <artifactVersion>${project.version}</artifactVersion>
+              <addCompileSourceRoot>true</addCompileSourceRoot>
+
+              <generateModels>true</generateModels>
+              <generateApis>true</generateApis>
+              <generateModelDocumentation>true</generateModelDocumentation>
+
+              <verbose>${openapi-codegen-verbose}</verbose>
+              <output>${project.basedir}/target/sdks/java/api</output>
+              <skipOverwrite>false</skipOverwrite>
+
+              <generateSupportingFiles>true</generateSupportingFiles>
+              <enablePostProcessFile>true</enablePostProcessFile>
+              <ignoreFileOverride>${project.basedir}/target/generated-sources/java/api/.swagger-codegen-ignore</ignoreFileOverride>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <classesDirectory>target/classes</classesDirectory>
+          <includes>
+            <include>com/sphereon/vdx/ecmo/api/*</include>
+            <include>com/sphereon/vdx/ecmo/model/*</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven-central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
+</project>

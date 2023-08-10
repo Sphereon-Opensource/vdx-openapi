@@ -1,0 +1,601 @@
+openapi: 3.0.3
+info:
+  description: External Contact Manager Openapi from Verifiable Data Exchange
+  version: '0.1.0'
+  title: External Contact Manager Openapi
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - url: '{protocol}://{environment}.vdx.sphereon.io:{port}/{projectName}/v1'
+    variables:
+      protocol:
+        default: https
+        enum:
+          - http
+          - https
+      environment:
+        default: api.dev
+        enum:
+          - api         # Production server
+          - api.dev     # Development server
+          - api.staging # Staging server
+      projectName:
+        default: ecmo
+        description: External Contact Manager Openapi
+      port:
+        default: '443'
+        enum:
+          - '443'
+          - '8443'
+
+paths:
+  /contacts:
+    get:
+      tags:
+        - Contacts
+      summary: Get the contacts by given parameters
+      operationId: cmGetContacts
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindContact'
+      responses:
+        200:
+          description: Successfully fetched contacts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+    post:
+      tags:
+        - Contacts
+      summary: Add a new contact
+      operationId: cmAddContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddContact'
+      responses:
+        201:
+          description: Contact successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+  /contacts/{contactId}:
+    get:
+      tags:
+        - Contacts
+      summary: Get the Contact by ID.
+      operationId: cmGetContact
+      responses:
+        200:
+          description: Successfully fetched the contact.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Contact does not exist.
+      parameters:
+        - $ref: '#/components/parameters/contactId'
+    delete:
+      tags:
+        - Contacts
+      summary: Delete a contact by ID.
+      operationId: cmRemoveContact
+      responses:
+        200:
+          description: Successfully deleted the contact.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+      parameters:
+        - $ref: '#/components/parameters/contactId'
+    put:
+      tags:
+        - Contacts
+      summary: Update a contact
+      operationId: cmUpdateContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+      responses:
+        200:
+          description: Contact successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Contact does not exist.
+      parameters:
+        - $ref: '#/components/parameters/contactId'
+  /identities:
+    get:
+      tags:
+        - Identities
+      summary: Get the identities by given parameters
+      operationId: cmGetIdentities
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindIdentity'
+      responses:
+        200:
+          description: Successfully fetched identites.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+    post:
+      tags:
+        - Identities
+      summary: Add a new identity
+      operationId: cmAddIdentity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddIdentity'
+      responses:
+        201:
+          description: Identity successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+  /identities/{identityId}:
+    get:
+      tags:
+        - Identities
+      summary: Get the Identity by ID.
+      operationId: cmGetIdentity
+      responses:
+        200:
+          description: Successfully fetched the identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Identity does not exist.
+      parameters:
+        - $ref: '#/components/parameters/identityId'
+    delete:
+      tags:
+        - Identities
+      summary: Delete a identity by ID.
+      operationId: cmRemoveIdentity
+      responses:
+        200:
+          description: Successfully deleted the identity.
+          content:
+            application/json:
+              schema:
+                type: boolean
+      parameters:
+        - $ref: '#/components/parameters/identityId'
+    put:
+      tags:
+        - Identities
+      summary: Update a identity
+      operationId: cmUpdateIdentity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identity'
+      responses:
+        200:
+          description: Identity successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        404:
+          description: Contact does not exist.
+      parameters:
+        - $ref: '#/components/parameters/identityId'
+components:
+  securitySchemes:
+    access_token:
+      type: http
+      scheme: bearer
+      # we need to introduce additional properties to almost every object
+  parameters:
+    contactId:
+      name: contactId
+      in: path
+      description: The id of the contact.
+      required: true
+      schema:
+        type: string
+      example: 280fe02a-3b9a-11eb-adc1-0242ac120002
+    identityId:
+      name: identityId
+      in: path
+      description: The id of the identity.
+      required: true
+      schema:
+        type: string
+      example: 562fe02a-3b9a-11eb-adc1-0242ac120002
+  schemas:
+    AddContact:
+      type: object
+      properties:
+        name:
+          type: string
+        alias:
+          type: string
+        uri:
+          type: string
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicIdentity'
+    AddIdentity:
+      type: object
+      properties:
+        contactId:
+          type: string
+        identity:
+          $ref: '#/components/schemas/BasicIdentity'
+    FindOptionsWhereProperty:
+      type: object
+      properties:
+        eq:
+          type: string
+        in:
+          type: array
+          items:
+            type: string
+        like:
+          type: string
+        not:
+          $ref: '#/components/schemas/FindOptionsWhereProperty'
+        notIn:
+          type: array
+          items:
+            type: string
+    FindOptionsWhere:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/FindOptionsWhereProperty'
+
+    FindContact:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+
+    FindIdentity:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+    IdentityRoleEnum:
+      type: string
+      enum:
+        - issuer
+        - verifier
+        - holder
+    ConnectionTypeEnum:
+      type: string
+      enum:
+        - OIDC
+        - SIOPv2
+        - SIOPv2+OpenID4VP
+    CorrelationIdentifierEnum:
+      type: string
+      enum:
+        - did
+        - url
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        alias:
+          type: string
+        uri:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity'
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+    Identity:
+      type: object
+      properties:
+        id:
+          type: string
+        alias:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identifier:
+          $ref: '#/components/schemas/CorrelationIdentifier'
+        connection:
+          $ref: '#/components/schemas/Connection'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataItem'
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+    BasicIdentity:
+      type: object
+      properties:
+        alias:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identifier:
+          $ref: '#/components/schemas/BasicCorrelationIdentifier'
+        connection:
+          $ref: '#/components/schemas/BasicConnection'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicMetadataItem'
+    MetadataItem:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        value:
+          type: string
+    BasicMetadataItem:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    CorrelationIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/CorrelationIdentifierEnum'
+        correlationId:
+          type: string
+    BasicCorrelationIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CorrelationIdentifierEnum'
+        correlationId:
+          type: string
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/ConnectionTypeEnum'
+        config:
+          oneOf:
+            - $ref: '#/components/schemas/OpenIdConfig'
+            - $ref: '#/components/schemas/DidAuthConfig'
+    BasicConnection:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ConnectionTypeEnum'
+        config:
+          oneOf:
+            - $ref: '#/components/schemas/BasicDidAuthConfig'
+            - $ref: '#/components/schemas/BasicOpenIdConfig'
+    OpenIdConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        issuer:
+          type: string
+        redirectUrl:
+          type: string
+        dangerouslyAllowInsecureHttpRequests:
+          type: boolean
+        clientAuthMethod:
+          type: string
+          enum:
+            - basic
+            - post
+    BasicOpenIdConfig:
+      type: object
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        issuer:
+          type: string
+        redirectUrl:
+          type: string
+        dangerouslyAllowInsecureHttpRequests:
+          type: boolean
+        clientAuthMethod:
+          type: string
+          enum:
+            - basic
+            - post
+    DidAuthConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        stateId:
+          type: string
+        redirectUrl:
+          type: string
+        sessionId:
+          type: string
+    BasicDidAuthConfig:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        stateId:
+          type: string
+        redirectUrl:
+          type: string
+        sessionId:
+          type: string
+    Identifier:
+      type: object
+      properties:
+        did:
+          type: string
+          description: Decentralized identifier
+        alias:
+          type: string
+          description: Optional. Identifier alias. Can be used to reference an object in an external system
+        provider:
+          type: string
+          description: Identifier provider name
+        controllerKeyId:
+          type: string
+          description: Controller key id
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/IKey'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/IService'
+    TKeyType:
+      type: string
+      enum:
+        - Ed25519
+        - Secp256k1
+        - Secp256r1
+        - X25519
+        - Bls12381G1
+        - Bls12381G2
+        - RSA
+    IKey:
+      type: object
+      properties:
+        kid:
+          type: string
+          description: Key ID
+        kms:
+          type: string
+          description: Key Management System
+        type:
+          $ref: '#/components/schemas/TKeyType'
+        publicKeyHex:
+          type: string
+          description: Public key
+        privateKeyHex:
+          type: string
+          description: Optional. Private key
+        meta:
+          $ref: '#/components/schemas/KeyMetadata'
+    KeyMetadata:
+      type: object
+      properties:
+        algorithms:
+          type: array
+          items:
+            type: string
+    IService:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        serviceEndpoint:
+          type: object
+          oneOf:
+            - type: string
+            - type: object
+        description:
+          type: string
+security:
+  - access_token: []
