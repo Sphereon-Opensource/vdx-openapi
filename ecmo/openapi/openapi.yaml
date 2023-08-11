@@ -43,6 +43,16 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/FindContact'
+          example:
+            filter:
+              - eq:
+                  name: John
+              - like:
+                  alias: Smith
+              - in:
+                  roles:
+                    - issuer
+                    - verifier
       responses:
         200:
           description: Successfully fetched contacts.
@@ -163,6 +173,17 @@ paths:
           required: false
           schema:
             $ref: '#/components/schemas/FindIdentity'
+          example:
+            filter:
+              - eq:
+                  alias: alias1
+              - like:
+                  alias: alias1
+              - in:
+                  alias:
+                    - alias1
+                    - alias2
+
       responses:
         200:
           description: Successfully fetched identites.
@@ -322,18 +343,22 @@ components:
       properties:
         eq:
           type: string
+          example: John
         in:
           type: array
           items:
             type: string
+            example: [Smith, Doe]
         like:
           type: string
+          example: Smith
         not:
           $ref: '#/components/schemas/FindOptionsWhereProperty'
         notIn:
           type: array
           items:
             type: string
+            example: [Johnson, Williams]
     FindOptionsWhere:
       type: object
       additionalProperties:
