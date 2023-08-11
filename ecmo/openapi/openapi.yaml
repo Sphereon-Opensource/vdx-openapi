@@ -36,7 +36,7 @@ paths:
       tags:
         - Contacts
       summary: Get the contacts by given parameters
-      operationId: cmGetContacts
+      operationId: getContacts
       parameters:
         - name: filter
           in: query
@@ -52,11 +52,17 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contact'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
     post:
       tags:
         - Contacts
       summary: Add a new contact
-      operationId: cmAddContact
+      operationId: addContact
       requestBody:
         content:
           application/json:
@@ -73,12 +79,14 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
   /contacts/{contactId}:
     get:
       tags:
         - Contacts
       summary: Get the Contact by ID.
-      operationId: cmGetContact
+      operationId: getContact
       responses:
         200:
           description: Successfully fetched the contact.
@@ -90,6 +98,8 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
         404:
           description: Contact does not exist.
       parameters:
@@ -98,7 +108,7 @@ paths:
       tags:
         - Contacts
       summary: Delete a contact by ID.
-      operationId: cmRemoveContact
+      operationId: removeContact
       responses:
         200:
           description: Successfully deleted the contact.
@@ -110,13 +120,15 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
       parameters:
         - $ref: '#/components/parameters/contactId'
     put:
       tags:
         - Contacts
       summary: Update a contact
-      operationId: cmUpdateContact
+      operationId: updateContact
       requestBody:
         content:
           application/json:
@@ -133,6 +145,8 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
         404:
           description: Contact does not exist.
       parameters:
@@ -142,7 +156,7 @@ paths:
       tags:
         - Identities
       summary: Get the identities by given parameters
-      operationId: cmGetIdentities
+      operationId: getIdentities
       parameters:
         - name: filter
           in: query
@@ -162,11 +176,13 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
     post:
       tags:
         - Identities
       summary: Add a new identity
-      operationId: cmAddIdentity
+      operationId: addIdentity
       requestBody:
         content:
           application/json:
@@ -183,12 +199,14 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
   /identities/{identityId}:
     get:
       tags:
         - Identities
       summary: Get the Identity by ID.
-      operationId: cmGetIdentity
+      operationId: getIdentity
       responses:
         200:
           description: Successfully fetched the identity.
@@ -200,6 +218,8 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
         404:
           description: Identity does not exist.
       parameters:
@@ -208,7 +228,7 @@ paths:
       tags:
         - Identities
       summary: Delete a identity by ID.
-      operationId: cmRemoveIdentity
+      operationId: removeIdentity
       responses:
         200:
           description: Successfully deleted the identity.
@@ -216,13 +236,21 @@ paths:
             application/json:
               schema:
                 type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Identity does not exist.
       parameters:
         - $ref: '#/components/parameters/identityId'
     put:
       tags:
         - Identities
       summary: Update a identity
-      operationId: cmUpdateIdentity
+      operationId: updateIdentity
       requestBody:
         content:
           application/json:
@@ -239,8 +267,10 @@ paths:
           description: Bad request.
         401:
           description: Unauthorized.
+        403:
+          description: Forbidden.
         404:
-          description: Contact does not exist.
+          description: Identity does not exist.
       parameters:
         - $ref: '#/components/parameters/identityId'
 components:
