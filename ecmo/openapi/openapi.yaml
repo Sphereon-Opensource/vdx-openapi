@@ -29,12 +29,26 @@ servers:
         enum:
           - '443'
           - '8443'
-
+tags:
+  - name: Contact
+    description: Endpoints related to the entity contact
+    externalDocs:
+      description: Find out more
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+  - name: Identity
+    description: Endpoints related to the entity identity
+    externalDocs:
+      description: Find out more
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+  - name: Relationship
+    description: Endpoints related to the entity relationship
+  - name: ContactType
+    description: Endpoints related to the entity contact type
 paths:
   /contacts:
     get:
       tags:
-        - Contacts
+        - Contact
       summary: Get the contacts by given parameters
       operationId: getContacts
       parameters:
@@ -45,14 +59,11 @@ paths:
             $ref: '#/components/schemas/FindContact'
           example:
             filter:
-              - eq:
-                  name: John
-              - like:
-                  alias: Smith
-              - in:
-                  roles:
-                    - issuer
-                    - verifier
+              - contactOwner:
+                  firstName: relation_first_name
+              - contactOwner:
+                  middleName: relation_middle_name
+
       responses:
         200:
           description: Successfully fetched contacts.
@@ -62,6 +73,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Contact'
+                example:
+                  - contactType:
+                      type: ContactTypeEnum.PERSON
+                      tenantId: 0605761c-4113-4ce5-a6b2-9cbae2f9d287
+                      name: relation_contact_type_name
+                      description: new_description
+                    contactOwner:
+                      firstName: relation_first_name
+                      middleName: relation_middle_name
+                      lastName: relation_last_name
+                      displayName: relation_display_name
+                    uri: example.com
+
         400:
           description: Bad request.
         401:
@@ -70,7 +94,7 @@ paths:
           description: Forbidden.
     post:
       tags:
-        - Contacts
+        - Contact
       summary: Add a new contact
       operationId: addContact
       requestBody:
@@ -91,7 +115,28 @@ paths:
           description: Unauthorized.
         403:
           description: Forbidden.
+
   /contacts/{contactId}:
+    delete:
+      tags:
+        - Contact
+      summary: Delete a contact by ID.
+      operationId: removeContact
+      responses:
+        200:
+          description: Successfully deleted the contact.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+      parameters:
+        - $ref: '#/components/parameters/contactId'
     get:
       tags:
         - Contacts
@@ -112,26 +157,6 @@ paths:
           description: Forbidden.
         404:
           description: Contact does not exist.
-      parameters:
-        - $ref: '#/components/parameters/contactId'
-    delete:
-      tags:
-        - Contacts
-      summary: Delete a contact by ID.
-      operationId: removeContact
-      responses:
-        200:
-          description: Successfully deleted the contact.
-          content:
-            application/json:
-              schema:
-                type: boolean
-        400:
-          description: Bad request.
-        401:
-          description: Unauthorized.
-        403:
-          description: Forbidden.
       parameters:
         - $ref: '#/components/parameters/contactId'
     put:
@@ -161,10 +186,160 @@ paths:
           description: Contact does not exist.
       parameters:
         - $ref: '#/components/parameters/contactId'
+
+  /contacts/{contactId}/relations:
+    get:
+      tags:
+        - Contact
+        - Relationship
+      summary: Get relationships by the contact ID.
+      operationId: getContactRelationships
+      responses:
+        200:
+          description: Successfully fetched the contact's relationships.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicContactRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Contact does not exist.
+      parameters:
+        - $ref: '#/components/parameters/contactId'
+
+  /contact-types:
+    get:
+      tags:
+        - ContactType
+      summary: Get the contact-types by given parameters
+      operationId: getContactTypes
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindContactType'
+      responses:
+        200:
+          description: Successfully fetched contact-types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+    post:
+      tags:
+        - ContactType
+      summary: Add a new contact-type
+      operationId: addContactType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddContactType'
+      responses:
+        201:
+          description: contact-type successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+
+  /contact-types/{contactTypeId}:
+    delete:
+      tags:
+        - ContactType
+      summary: Delete a contact-type by ID.
+      operationId: removeContactType
+      responses:
+        200:
+          description: Successfully deleted the contact-type.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: ContactType does not exist.
+      parameters:
+        - $ref: '#/components/parameters/contactTypeId'
+    get:
+      tags:
+        - ContactType
+      summary: Get the contact-type by ID.
+      operationId: getContactType
+      responses:
+        200:
+          description: Successfully fetched the identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Identity does not exist.
+      parameters:
+        - $ref: '#/components/parameters/contactTypeId'
+    put:
+      tags:
+        - ContactType
+      summary: Update a contact-type
+      operationId: updateContactType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactType'
+      responses:
+        200:
+          description: ContactType successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: ContactType does not exist.
+      parameters:
+        - $ref: '#/components/parameters/contactTypeId'
+
   /identities:
     get:
       tags:
-        - Identities
+        - Identity
       summary: Get the identities by given parameters
       operationId: getIdentities
       parameters:
@@ -201,7 +376,7 @@ paths:
           description: Forbidden.
     post:
       tags:
-        - Identities
+        - Identity
       summary: Add a new identity
       operationId: addIdentity
       requestBody:
@@ -222,32 +397,11 @@ paths:
           description: Unauthorized.
         403:
           description: Forbidden.
+
   /identities/{identityId}:
-    get:
-      tags:
-        - Identities
-      summary: Get the Identity by ID.
-      operationId: getIdentity
-      responses:
-        200:
-          description: Successfully fetched the identity.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Identity'
-        400:
-          description: Bad request.
-        401:
-          description: Unauthorized.
-        403:
-          description: Forbidden.
-        404:
-          description: Identity does not exist.
-      parameters:
-        - $ref: '#/components/parameters/identityId'
     delete:
       tags:
-        - Identities
+        - Identity
       summary: Delete a identity by ID.
       operationId: removeIdentity
       responses:
@@ -267,9 +421,31 @@ paths:
           description: Identity does not exist.
       parameters:
         - $ref: '#/components/parameters/identityId'
+    get:
+      tags:
+        - Identity
+      summary: Get the Identity by ID.
+      operationId: getIdentity
+      responses:
+        200:
+          description: Successfully fetched the identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Identity does not exist.
+      parameters:
+        - $ref: '#/components/parameters/identityId'
     put:
       tags:
-        - Identities
+        - Identity
       summary: Update a identity
       operationId: updateIdentity
       requestBody:
@@ -294,6 +470,131 @@ paths:
           description: Identity does not exist.
       parameters:
         - $ref: '#/components/parameters/identityId'
+
+  /relations:
+    get:
+      tags:
+        - Relationship
+      summary: Get the relationships by criteria.
+      operationId: getRelationships
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindRelationship'
+      responses:
+        200:
+          description: Successfully fetched the relationships.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Relationship does not exist.
+    post:
+      tags:
+        - Relationship
+      summary: Add a new relationship
+      operationId: addRelationship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRelationship'
+      responses:
+        201:
+          description: Relationship successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+
+  /relations/{relationId}:
+    delete:
+      tags:
+        - Relationship
+      summary: Delete a relationship by ID.
+      operationId: removeRelationship
+      responses:
+        200:
+          description: Successfully deleted the relationship.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Relationship does not exist.
+      parameters:
+        - $ref: '#/components/parameters/relationId'
+    get:
+      tags:
+        - Relationship
+      summary: Get the relationship by ID.
+      operationId: getRelationship
+      responses:
+        200:
+          description: Successfully fetched the relationship.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Relationship does not exist.
+      parameters:
+        - $ref: '#/components/parameters/relationId'
+    put:
+      tags:
+        - Relationship
+      summary: Update a relationship
+      operationId: updateRelationship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRelationship'
+      responses:
+        200:
+          description: Relationship successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+      parameters:
+        - $ref: '#/components/parameters/relationId'
+
 components:
   securitySchemes:
     access_token:
@@ -301,6 +602,7 @@ components:
       scheme: bearer
       # we need to introduce additional properties to almost every object
   parameters:
+
     contactId:
       name: contactId
       in: path
@@ -309,6 +611,14 @@ components:
       schema:
         type: string
       example: 280fe02a-3b9a-11eb-adc1-0242ac120002
+    contactTypeId:
+      name: contactTypeId
+      in: path
+      description: The id of the contact-type.
+      required: true
+      schema:
+        type: string
+      example: 68jfe02a-mb9w-11eb-rdq1-22i1ad18020v
     identityId:
       name: identityId
       in: path
@@ -316,7 +626,17 @@ components:
       required: true
       schema:
         type: string
-      example: 562fe02a-3b9a-11eb-adc1-0242ac120002
+      example: 760fe02a-nv6a-1lk9-poa1-0242ac10912
+
+    relationId:
+      name: relationId
+      in: path
+      description: The id of the relationship.
+      required: true
+      schema:
+        type: string
+      example: 091fe02a-3ml1-nb6b-a9ht-0242ac15632
+
   schemas:
     AddContact:
       type: object
@@ -331,6 +651,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BasicIdentity'
+
+    AddContactType:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - person
+            - organization
+        name:
+          type: string
+        tenantId:
+          type: string
+        description:
+          type: string
+
     AddIdentity:
       type: object
       properties:
@@ -338,6 +674,318 @@ components:
           type: string
         identity:
           $ref: '#/components/schemas/BasicIdentity'
+
+    AddRelationship:
+      type: object
+      properties:
+        leftId:
+          type: string
+        rightId:
+          type: string
+
+    BasicContact:
+      type: object
+      properties:
+        uri:
+          type: string
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicIdentity'
+        contactOwner:
+          oneOf:
+            - $ref: '#/components/schemas/BasicPerson'
+            - $ref: '#/components/schemas/BasicOrganization'
+        contactType:
+          $ref: '#/components/schemas/BasicContactType'
+        relationships:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicContactRelationship'
+
+    BasicContactType:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - person
+            - organization
+        name:
+          type: string
+        tenantId:
+          type: string
+
+    BasicContactRelationship:
+      type: object
+      properties:
+        leftId:
+          type: string
+        rightId:
+          type: string
+
+    BasicConnection:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ConnectionTypeEnum'
+        config:
+          $ref: '#/components/schemas/BasicConnectionConfig'
+      required:
+        - type
+        - config
+
+    BasicConnectionConfig:
+      anyOf:
+        - $ref: '#/components/schemas/BasicDidAuthConfig'
+        - $ref: '#/components/schemas/BasicOpenIdConfig'
+
+    BasicCorrelationIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CorrelationIdentifierEnum'
+        correlationId:
+          type: string
+      required:
+        - type
+        - correlationId
+
+    BasicDidAuthConfig:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        stateId:
+          type: string
+        redirectUrl:
+          type: string
+        sessionId:
+          type: string
+      required:
+        - identifier
+        - stateId
+        - redirectUrl
+        - sessionId
+
+    BasicIdentity:
+      type: object
+      properties:
+        alias:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identifier:
+          $ref: '#/components/schemas/BasicCorrelationIdentifier'
+        connection:
+          $ref: '#/components/schemas/BasicConnection'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/BasicMetadataItem'
+
+    BasicMetadataItem:
+      type: object
+      properties:
+        label:
+          type: string
+    BasicOpenIdConfig:
+      type: object
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        issuer:
+          type: string
+        redirectUrl:
+          type: string
+        dangerouslyAllowInsecureHttpRequests:
+          type: boolean
+        clientAuthMethod:
+          type: string
+          enum:
+            - basic
+            - post
+      required:
+        - clientId
+        - clientSecret
+        - scopes
+        - issuer
+        - redirectUrl
+        - dangerouslyAllowInsecureHttpRequests
+
+    BasicOrganization:
+      type: object
+      properties:
+        displayName:
+          type: string
+
+    BasicPerson:
+      type: object
+      properties:
+        displayName:
+          type: string
+
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - OIDC
+            - SIOPv2
+            - SIOPv2+OpenID4VP
+        config:
+          $ref: '#/components/schemas/ConnectionConfig'
+
+    ConnectionConfig:
+      oneOf:
+        - $ref: '#/components/schemas/OpenIdConfig'
+        - $ref: '#/components/schemas/DidAuthConfig'
+
+    ConnectionTypeEnum:
+      type: string
+      enum:
+        - OIDC
+        - SIOPv2
+        - SIOPv2+OpenID4VP
+
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        uri:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity'
+        contactOwner:
+          oneOf:
+            - $ref: '#/components/schemas/Person'
+            - $ref: '#/components/schemas/Organization'
+        contactType:
+          $ref: '#/components/schemas/ContactType'
+        relationships:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactRelationship'
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    ContactRelationship:
+      type: object
+      properties:
+        id:
+          type: string
+        leftId:
+          type: string
+        rightId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    ContactType:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - person
+            - organization
+        name:
+          type: string
+        tenantId:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    ContactTypeEnum:
+      type: string
+      enum:
+        - person
+        - organization
+
+    CorrelationIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - did
+            - url
+        correlationId:
+          type: string
+
+    CorrelationIdentifierEnum:
+      type: string
+      enum:
+        - did
+        - url
+
+    DidAuthConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        stateId:
+          type: string
+        redirectUrl:
+          type: string
+        sessionId:
+          type: string
+
+    FindContact:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+
+    FindContactType:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+
+    FindIdentity:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+
     FindOptionsWhereProperty:
       type: object
       properties:
@@ -359,62 +1007,40 @@ components:
           items:
             type: string
             example: [Johnson, Williams]
+
     FindOptionsWhere:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/FindOptionsWhereProperty'
 
-    FindContact:
-      type: array
-      items:
-        $ref: '#/components/schemas/FindOptionsWhere'
+    FindRelationship:
+      # not sure what to put here
+      type: object
 
-    FindIdentity:
-      type: array
-      items:
-        $ref: '#/components/schemas/FindOptionsWhere'
-    IdentityRoleEnum:
-      type: string
-      enum:
-        - issuer
-        - verifier
-        - holder
-    ConnectionTypeEnum:
-      type: string
-      enum:
-        - OIDC
-        - SIOPv2
-        - SIOPv2+OpenID4VP
-    CorrelationIdentifierEnum:
-      type: string
-      enum:
-        - did
-        - url
-    Contact:
+    Identifier:
       type: object
       properties:
-        id:
+        did:
           type: string
-        name:
-          type: string
+          description: Decentralized identifier
         alias:
           type: string
-        uri:
+          description: Optional. Identifier alias. Can be used to reference an object in an external system
+        provider:
           type: string
-        roles:
+          description: Identifier provider name
+        controllerKeyId:
+          type: string
+          description: Controller key id
+        keys:
           type: array
           items:
-            $ref: '#/components/schemas/IdentityRoleEnum'
-        identities:
+            $ref: '#/components/schemas/Key'
+        services:
           type: array
           items:
-            $ref: '#/components/schemas/Identity'
-        createdAt:
-          type: string
-          format: date-time
-        lastUpdatedAt:
-          type: string
-          format: date-time
+            $ref: '#/components/schemas/Service'
+
     Identity:
       type: object
       properties:
@@ -440,23 +1066,42 @@ components:
         lastUpdatedAt:
           type: string
           format: date-time
-    BasicIdentity:
+
+    IdentityRoleEnum:
+      type: string
+      enum:
+        - issuer
+        - verifier
+        - holder
+
+    Key:
       type: object
       properties:
-        alias:
+        kid:
           type: string
-        roles:
+          description: Key ID
+        kms:
+          type: string
+          description: Key Management System
+        type:
+          $ref: '#/components/schemas/TKeyType'
+        publicKeyHex:
+          type: string
+          description: Public key
+        privateKeyHex:
+          type: string
+          description: Optional. Private key
+        meta:
+          $ref: '#/components/schemas/KeyMetadata'
+
+    KeyMetadata:
+      type: object
+      properties:
+        algorithms:
           type: array
           items:
-            $ref: '#/components/schemas/IdentityRoleEnum'
-        identifier:
-          $ref: '#/components/schemas/BasicCorrelationIdentifier'
-        connection:
-          $ref: '#/components/schemas/BasicConnection'
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasicMetadataItem'
+            type: string
+
     MetadataItem:
       type: object
       properties:
@@ -466,49 +1111,7 @@ components:
           type: string
         value:
           type: string
-    BasicMetadataItem:
-      type: object
-      properties:
-        label:
-          type: string
-        value:
-          type: string
-    CorrelationIdentifier:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          $ref: '#/components/schemas/CorrelationIdentifierEnum'
-        correlationId:
-          type: string
-    BasicCorrelationIdentifier:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CorrelationIdentifierEnum'
-        correlationId:
-          type: string
-    Connection:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          $ref: '#/components/schemas/ConnectionTypeEnum'
-        config:
-          oneOf:
-            - $ref: '#/components/schemas/OpenIdConfig'
-            - $ref: '#/components/schemas/DidAuthConfig'
-    BasicConnection:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ConnectionTypeEnum'
-        config:
-          oneOf:
-            - $ref: '#/components/schemas/BasicDidAuthConfig'
-            - $ref: '#/components/schemas/BasicOpenIdConfig'
+
     OpenIdConfig:
       type: object
       properties:
@@ -533,112 +1136,153 @@ components:
           enum:
             - basic
             - post
-    BasicOpenIdConfig:
-      type: object
-      properties:
-        clientId:
-          type: string
-        clientSecret:
-          type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        issuer:
-          type: string
-        redirectUrl:
-          type: string
-        dangerouslyAllowInsecureHttpRequests:
-          type: boolean
-        clientAuthMethod:
-          type: string
-          enum:
-            - basic
-            - post
-    DidAuthConfig:
+            - undefined
+
+    Organization:
       type: object
       properties:
         id:
           type: string
+        legalName:
+          type: string
+        displayName:
+          type: string
+        cocNumber:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    PartialConnection:
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/PartialConnectionConfig'
+      required:
+        - config
+
+    PartialConnectionConfig:
+      anyOf:
+        - $ref: '#/components/schemas/PartialDidAuthConfig'
+        - $ref: '#/components/schemas/PartialOpenIdConfig'
+
+    PartialContact:
+      type: object
+      properties:
+        identities:
+          $ref: '#/components/schemas/PartialIdentity'
+        contactOwner:
+          $ref: '#/components/schemas/PartialPerson'
+        contactType:
+          $ref: '#/components/schemas/PartialContactType'
+        relationships:
+          $ref: '#/components/schemas/PartialContactRelationship'
+
+    PartialContactRelationship:
+      type: object
+
+    PartialContactType:
+      type: object
+
+    PartialDidAuthConfig:
+      type: object
+      properties:
         identifier:
-          $ref: '#/components/schemas/Identifier'
+          $ref: '#/components/schemas/PartialIdentifier'
         stateId:
           type: string
         redirectUrl:
           type: string
         sessionId:
           type: string
-    BasicDidAuthConfig:
+
+    PartialIdentifier:
+      type: object
+
+    PartialIdentity:
       type: object
       properties:
         identifier:
-          $ref: '#/components/schemas/Identifier'
-        stateId:
-          type: string
-        redirectUrl:
-          type: string
-        sessionId:
-          type: string
-    Identifier:
-      type: object
-      properties:
-        did:
-          type: string
-          description: Decentralized identifier
-        alias:
-          type: string
-          description: Optional. Identifier alias. Can be used to reference an object in an external system
-        provider:
-          type: string
-          description: Identifier provider name
-        controllerKeyId:
-          type: string
-          description: Controller key id
-        keys:
+          $ref: '#/components/schemas/CorrelationIdentifier'
+        connection:
+          $ref: '#/components/schemas/PartialConnection'
+        metadata:
+          $ref: '#/components/schemas/PartialMetadataItem'
+        roles:
           type: array
           items:
-            $ref: '#/components/schemas/IKey'
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/IService'
-    TKeyType:
-      type: string
-      enum:
-        - Ed25519
-        - Secp256k1
-        - Secp256r1
-        - X25519
-        - Bls12381G1
-        - Bls12381G2
-        - RSA
-    IKey:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        contactId:
+          type: string
+
+    PartialMetadataItem:
+      type: object
+
+    PartialOrganization:
       type: object
       properties:
-        kid:
+        id:
           type: string
-          description: Key ID
-        kms:
+        legalName:
           type: string
-          description: Key Management System
-        type:
-          $ref: '#/components/schemas/TKeyType'
-        publicKeyHex:
+        displayName:
           type: string
-          description: Public key
-        privateKeyHex:
+        cocNumber:
           type: string
-          description: Optional. Private key
-        meta:
-          $ref: '#/components/schemas/KeyMetadata'
-    KeyMetadata:
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    PartialOpenIdConfig:
+      type: object
+
+    PartialPerson:
       type: object
       properties:
-        algorithms:
-          type: array
-          items:
-            type: string
-    IService:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        displayName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        displayName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+
+    Service:
       type: object
       properties:
         id:
@@ -652,5 +1296,14 @@ components:
             - type: object
         description:
           type: string
-security:
-  - access_token: []
+
+    TKeyType:
+      type: string
+      enum:
+        - Ed25519
+        - Secp256k1
+        - Secp256r1
+        - X25519
+        - Bls12381G1
+        - Bls12381G2
+        - RSA
