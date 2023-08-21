@@ -683,41 +683,6 @@ components:
         rightId:
           type: string
 
-    BasicContact:
-      type: object
-      properties:
-        uri:
-          type: string
-        identities:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasicIdentity'
-        contactOwner:
-          oneOf:
-            - $ref: '#/components/schemas/BasicPerson'
-            - $ref: '#/components/schemas/BasicOrganization'
-        contactType:
-          $ref: '#/components/schemas/BasicContactType'
-        relationships:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasicContactRelationship'
-
-    BasicContactType:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-            - person
-            - organization
-        name:
-          type: string
-        tenantId:
-          type: string
-
     BasicContactRelationship:
       type: object
       properties:
@@ -738,7 +703,7 @@ components:
         - config
 
     BasicConnectionConfig:
-      anyOf:
+      oneOf:
         - $ref: '#/components/schemas/BasicDidAuthConfig'
         - $ref: '#/components/schemas/BasicOpenIdConfig'
 
@@ -822,18 +787,6 @@ components:
         - issuer
         - redirectUrl
         - dangerouslyAllowInsecureHttpRequests
-
-    BasicOrganization:
-      type: object
-      properties:
-        displayName:
-          type: string
-
-    BasicPerson:
-      type: object
-      properties:
-        displayName:
-          type: string
 
     Connection:
       type: object
@@ -1148,112 +1101,6 @@ components:
         displayName:
           type: string
         cocNumber:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        lastUpdatedAt:
-          type: string
-          format: date-time
-
-    PartialConnection:
-      type: object
-      properties:
-        config:
-          $ref: '#/components/schemas/PartialConnectionConfig'
-      required:
-        - config
-
-    PartialConnectionConfig:
-      anyOf:
-        - $ref: '#/components/schemas/PartialDidAuthConfig'
-        - $ref: '#/components/schemas/PartialOpenIdConfig'
-
-    PartialContact:
-      type: object
-      properties:
-        identities:
-          $ref: '#/components/schemas/PartialIdentity'
-        contactOwner:
-          $ref: '#/components/schemas/PartialPerson'
-        contactType:
-          $ref: '#/components/schemas/PartialContactType'
-        relationships:
-          $ref: '#/components/schemas/PartialContactRelationship'
-
-    PartialContactRelationship:
-      type: object
-
-    PartialContactType:
-      type: object
-
-    PartialDidAuthConfig:
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/PartialIdentifier'
-        stateId:
-          type: string
-        redirectUrl:
-          type: string
-        sessionId:
-          type: string
-
-    PartialIdentifier:
-      type: object
-
-    PartialIdentity:
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/CorrelationIdentifier'
-        connection:
-          $ref: '#/components/schemas/PartialConnection'
-        metadata:
-          $ref: '#/components/schemas/PartialMetadataItem'
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityRoleEnum'
-        contactId:
-          type: string
-
-    PartialMetadataItem:
-      type: object
-
-    PartialOrganization:
-      type: object
-      properties:
-        id:
-          type: string
-        legalName:
-          type: string
-        displayName:
-          type: string
-        cocNumber:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        lastUpdatedAt:
-          type: string
-          format: date-time
-
-    PartialOpenIdConfig:
-      type: object
-
-    PartialPerson:
-      type: object
-      properties:
-        id:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        middleName:
-          type: string
-        displayName:
           type: string
         createdAt:
           type: string
