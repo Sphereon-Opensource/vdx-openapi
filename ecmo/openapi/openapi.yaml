@@ -191,7 +191,6 @@ paths:
     get:
       tags:
         - Contact
-        - Relationship
       summary: Get relationships by the contact ID.
       operationId: getContactRelationships
       responses:
@@ -656,10 +655,7 @@ components:
       type: object
       properties:
         type:
-          type: string
-          enum:
-            - person
-            - organization
+          $ref: '#/components/schemas/ContactTypeEnum'
         name:
           type: string
         tenantId:
@@ -776,10 +772,7 @@ components:
         dangerouslyAllowInsecureHttpRequests:
           type: boolean
         clientAuthMethod:
-          type: string
-          enum:
-            - basic
-            - post
+          $ref: '#/components/schemas/ClientAuthMethodEnum'
       required:
         - clientId
         - clientSecret
@@ -788,17 +781,20 @@ components:
         - redirectUrl
         - dangerouslyAllowInsecureHttpRequests
 
+    ClientAuthMethodEnum:
+      type: string
+      enum:
+        - basic
+        - post
+        - undefined
+
     Connection:
       type: object
       properties:
         id:
           type: string
         type:
-          type: string
-          enum:
-            - OIDC
-            - SIOPv2
-            - SIOPv2+OpenID4VP
+          $ref: '#/components/schemas/ConnectionTypeEnum'
         config:
           $ref: '#/components/schemas/ConnectionConfig'
 
@@ -868,10 +864,7 @@ components:
         id:
           type: string
         type:
-          type: string
-          enum:
-            - person
-            - organization
+          $ref: '#/components/schemas/ContactTypeEnum'
         name:
           type: string
         tenantId:
@@ -897,10 +890,7 @@ components:
         id:
           type: string
         type:
-          type: string
-          enum:
-            - did
-            - url
+          $ref: '#/components/schemas/CorrelationIdentifierEnum'
         correlationId:
           type: string
 
@@ -1085,11 +1075,7 @@ components:
         dangerouslyAllowInsecureHttpRequests:
           type: boolean
         clientAuthMethod:
-          type: string
-          enum:
-            - basic
-            - post
-            - undefined
+          $ref: '#/components/schemas/ClientAuthMethodEnum'
 
     Organization:
       type: object
@@ -1138,11 +1124,14 @@ components:
           type: string
         serviceEndpoint:
           type: object
-          oneOf:
-            - type: string
-            - type: object
         description:
           type: string
+
+    StringType:
+      type: string
+
+    ObjectType:
+      type: object
 
     TKeyType:
       type: string
