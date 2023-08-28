@@ -1,92 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>com.sphereon.vdx</groupId>
-    <artifactId>vdx-parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-  </parent>
-
   <artifactId>edido</artifactId>
-  <name>External DID Openapi</name>
-  <description>External DID Openapi (Compatible with DIF Universal Registrar/Resolver) from Verifiable Data Exchange</description>
 
   <build>
+    <pluginManagement>
+    </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>${openapi-generator-version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>io.swagger.parser.v3</groupId>
-            <artifactId>swagger-parser</artifactId>
-            <version>2.0.5</version>
-          </dependency>
-          <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson-datatype-jsr310.version}</version>
-          </dependency>
-        </dependencies>
         <executions>
           <execution>
+            <configuration>
+              <configOptions>
+                <addCompileSourceRoot>true</addCompileSourceRoot>
+                <apiPackage>com.sphereon.vdx.edido.handler</apiPackage>
+                <artifactVersion>${project.version}</artifactVersion>
+
+                <artifactVersion>${project.version}</artifactVersion>
+                <documentationProvider>springfox</documentationProvider>
+
+                <enablePostProcessFile>true</enablePostProcessFile>
+                <generateApis>true</generateApis>
+                <generateModelDocumentation>true</generateModelDocumentation>
+                <generateModels>true</generateModels>
+
+                <generateSupportingFiles>true</generateSupportingFiles>
+                <importMappings>
+                  <importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
+                </importMappings>
+
+                <invokerPackage>com.sphereon.vdx.edido.handler</invokerPackage>
+                <modelPackage>com.sphereon.vdx.edido.model</modelPackage>
+                <output>${project.basedir}/target/sdks/java/api</output>
+
+                <serializableModel>true</serializableModel>
+                <skipOverwrite>false</skipOverwrite>
+                <snapshotVersion>true</snapshotVersion>
+
+                <typeMappings>
+                  <typeMapping>OffsetDateTime=Instant</typeMapping>
+                </typeMappings>
+                <verbose>${openapi-codegen-verbose}</verbose>
+              </configOptions>
+              <generatorName>spring</generatorName>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+
+            </configuration>
             <goals>
               <goal>generate</goal>
             </goals>
-            <phase>generate-sources</phase>
-            <configuration>
-              <!-- this is a slightly modified version of the spec from the link below, to fix some issues we have not resolved in the VC HTTP API -->
-              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
-
-              <generatorName>java</generatorName>
-              <!-- Java11+ native client -->
-              <library>native</library>
-
-              <typeMappings>
-                <typeMapping>OffsetDateTime=Instant</typeMapping>
-              </typeMappings>
-              <importMappings>
-                <importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
-              </importMappings>
-
-              <apiPackage>com.sphereon.vdx.edido.handler</apiPackage>
-              <modelPackage>com.sphereon.vdx.edido.model</modelPackage>
-              <artifactVersion>${project.version}</artifactVersion>
-              <invokerPackage>com.sphereon.vdx.edido.handler</invokerPackage>
-
-              <artifactVersion>${project.version}</artifactVersion>
-              <addCompileSourceRoot>true</addCompileSourceRoot>
-
-              <generateModels>true</generateModels>
-              <generateApis>true</generateApis>
-              <generateModelDocumentation>true</generateModelDocumentation>
-
-              <verbose>${openapi-codegen-verbose}</verbose>
-              <output>${project.basedir}/target/sdks/java/api</output>
-              <skipOverwrite>false</skipOverwrite>
-
-              <generateSupportingFiles>true</generateSupportingFiles>
-              <enablePostProcessFile>true</enablePostProcessFile>
-            </configuration>
+            <id>spring-server</id>
           </execution>
-        </executions>
-      </plugin>
 
+        </executions>
+        <groupId>org.openapitools</groupId>
+        <version>${openapi-generator-version}</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <proc>none</proc>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.8.1</version>
+      </plugin>
     </plugins>
   </build>
+
+  <description>External DID Openapi (Compatible with DIF Universal Registrar/Resolver) from Verifiable Data Exchange</description>
+  <modelVersion>4.0.0</modelVersion>
+  <name>External DID Openapi</name>
+
+  <parent>
+    <artifactId>vdx-parent</artifactId>
+    <groupId>com.sphereon.vdx</groupId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
   <pluginRepositories>
     <pluginRepository>
       <id>maven-central</id>

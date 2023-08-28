@@ -1,119 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>com.sphereon.vdx</groupId>
-    <artifactId>vdx-parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-  </parent>
-
   <artifactId>evco</artifactId>
-  <name>External Verifiable Credentials Openapi</name>
-  <description>Verifiable Data Exchange - External Verifiable Credentials Openapi.</description>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <java.version>11</java.version>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-
-    <openapi-codegen-verbose>false</openapi-codegen-verbose>
-    <jackson-databind.version>0.2.1</jackson-databind.version>
-    <springfox-swagger.version>3.0.0</springfox-swagger.version>
-  </properties>
 
   <build>
+    <pluginManagement>
+    </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
-        <version>${openapi-generator-version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>io.swagger.parser.v3</groupId>
-            <artifactId>swagger-parser</artifactId>
-            <version>2.0.5</version>
-          </dependency>
-          <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson-datatype-jsr310.version}</version>
-          </dependency>
-        </dependencies>
         <executions>
           <execution>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <phase>generate-sources</phase>
             <configuration>
-              <!-- this is a slightly modified version of the spec from the link below, to fix some issues we have not resolved in the VC HTTP API -->
-              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <addCompileSourceRoot>true</addCompileSourceRoot>
+              <apiPackage>com.sphereon.vdx.evco.api</apiPackage>
+              <artifactVersion>${project.version}</artifactVersion>
 
-              <!-- This is version 1.2.0 of the Sphereon VC HTTP API -->
-              <!--<inputSpec>https://raw.githubusercontent.com/Sphereon-Opensource/vc-http-api/d65c5df78721f110edea1e121c5a1dda0b53ea14/src/resources/swagger/vc-http-api.yaml</inputSpec>-->
+              <artifactVersion>${project.version}</artifactVersion>
+              <configOptions>
+                <documentationProvider>springfox</documentationProvider>
+                <serializableModel>true</serializableModel>
+                <snapshotVersion>true</snapshotVersion>
+              </configOptions>
 
-              <generatorName>java</generatorName>
-              <!-- Java11+ native client -->
-              <library>native</library>
+              <enablePostProcessFile>true</enablePostProcessFile>
+              <generateApis>true</generateApis>
+              <generateModelDocumentation>true</generateModelDocumentation>
+              <generateModels>true</generateModels>
 
-              <typeMappings>
-                <typeMapping>OffsetDateTime=Instant</typeMapping>
-              </typeMappings>
+              <generateSupportingFiles>true</generateSupportingFiles>
+              <generatorName>spring</generatorName>
+
+              <ignoreFileOverride>${project.basedir}/target/generated-sources/java/api/.swagger-codegen-ignore</ignoreFileOverride>
               <importMappings>
                 <importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
               </importMappings>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
 
-              <apiPackage>com.sphereon.vdx.evco.api</apiPackage>
-              <modelPackage>com.sphereon.vdx.evco.model</modelPackage>
-              <artifactVersion>${project.version}</artifactVersion>
               <invokerPackage>com.sphereon.vdx.evco.handler</invokerPackage>
-
-              <artifactVersion>${project.version}</artifactVersion>
-              <addCompileSourceRoot>true</addCompileSourceRoot>
-
-              <generateModels>true</generateModels>
-              <generateApis>true</generateApis>
-              <generateModelDocumentation>true</generateModelDocumentation>
-
-              <verbose>${openapi-codegen-verbose}</verbose>
+              <modelPackage>com.sphereon.vdx.evco.model</modelPackage>
               <output>${project.basedir}/target/sdks/java/api</output>
-              <skipOverwrite>false</skipOverwrite>
 
-              <generateSupportingFiles>true</generateSupportingFiles>
-              <enablePostProcessFile>true</enablePostProcessFile>
-              <ignoreFileOverride>${project.basedir}/target/generated-sources/java/api/.swagger-codegen-ignore</ignoreFileOverride>
+              <skipOverwrite>false</skipOverwrite>
+              <typeMappings>
+                <typeMapping>OffsetDateTime=Instant</typeMapping>
+              </typeMappings>
+              <verbose>${openapi-codegen-verbose}</verbose>
             </configuration>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <id>spring-server</id>
           </execution>
+
         </executions>
+        <groupId>org.openapitools</groupId>
+        <version>${openapi-generator-version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.2</version>
+        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <classesDirectory>target/classes</classesDirectory>
-          <includes>
-            <include>com/sphereon/vdx/evco/api/*</include>
-            <include>com/sphereon/vdx/evco/model/*</include>
-          </includes>
+          <proc>none</proc>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.8.1</version>
       </plugin>
     </plugins>
   </build>
+
+  <description>Verifiable Data Exchange - External Verifiable Credentials Openapi.</description>
+  <modelVersion>4.0.0</modelVersion>
+  <name>External Verifiable Credentials Openapi</name>
+
+  <parent>
+    <artifactId>vdx-parent</artifactId>
+    <groupId>com.sphereon.vdx</groupId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
   <pluginRepositories>
     <pluginRepository>
       <id>maven-central</id>
@@ -121,4 +88,16 @@
       <url>https://repo1.maven.org/maven2/</url>
     </pluginRepository>
   </pluginRepositories>
+
+  <properties>
+    <jackson-databind.version>0.2.1</jackson-databind.version>
+
+    <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+    <openapi-codegen-verbose>false</openapi-codegen-verbose>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <springfox-swagger.version>3.0.0</springfox-swagger.version>
+  </properties>
 </project>

@@ -939,7 +939,7 @@ components:
           type: array
           items:
             type: string
-            example: [Smith, Doe]
+            example: [ Smith, Doe ]
         like:
           type: string
           example: Smith
@@ -949,7 +949,7 @@ components:
           type: array
           items:
             type: string
-            example: [Johnson, Williams]
+            example: [ Johnson, Williams ]
 
     FindOptionsWhere:
       type: object
@@ -1124,14 +1124,11 @@ components:
           type: string
         serviceEndpoint:
           type: object
+          anyOf:
+            - type: string
+            - type: object
         description:
           type: string
-
-    StringType:
-      type: string
-
-    ObjectType:
-      type: object
 
     TKeyType:
       type: string
