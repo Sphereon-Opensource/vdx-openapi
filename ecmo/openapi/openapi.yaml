@@ -30,8 +30,8 @@ servers:
           - '443'
           - '8443'
 tags:
-  - name: Contact
-    description: Endpoints related to the entity contact
+  - name: Party
+    description: Endpoints related to the entity party
     externalDocs:
       description: Find out more
       url: https://github.com/Sphereon-Open-Source/SSI-SDK
@@ -45,41 +45,41 @@ tags:
   - name: ContactType
     description: Endpoints related to the entity contact type
 paths:
-  /contacts:
+  /parties:
     get:
       tags:
-        - Contact
-      summary: Get the contacts by given parameters
-      operationId: getContacts
+        - Party
+      summary: Get the parties by given parameters
+      operationId: getParties
       parameters:
         - name: filter
           in: query
           required: false
           schema:
-            $ref: '#/components/schemas/FindContact'
+            $ref: '#/components/schemas/FindParty'
           example:
             filter:
-              - contactOwner:
-                  firstName: relation_first_name
-              - contactOwner:
-                  middleName: relation_middle_name
+              - contact:
+                  firstName: default_first_name
+              - contact:
+                  middleName: default_middle_name
 
       responses:
         200:
-          description: Successfully fetched contacts.
+          description: Successfully fetched parties.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Contact'
+                  $ref: '#/components/schemas/PartyRelationship'
                 example:
                   - contactType:
-                      type: ContactTypeEnum.PERSON
+                      type: 'naturalPerson'
                       tenantId: 0605761c-4113-4ce5-a6b2-9cbae2f9d287
                       name: relation_contact_type_name
                       description: new_description
-                    contactOwner:
+                    contact:
                       firstName: relation_first_name
                       middleName: relation_middle_name
                       lastName: relation_last_name
@@ -94,21 +94,21 @@ paths:
           description: Forbidden.
     post:
       tags:
-        - Contact
-      summary: Add a new contact
-      operationId: addContact
+        - Party
+      summary: Add a new party
+      operationId: addParty
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddContact'
+              $ref: '#/components/schemas/NonPersistedParty'
       responses:
         201:
-          description: Contact successfully created.
+          description: Party successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/Party'
         400:
           description: Bad request.
         401:
@@ -116,15 +116,15 @@ paths:
         403:
           description: Forbidden.
 
-  /contacts/{contactId}:
+  /parties/{partyId}:
     delete:
       tags:
-        - Contact
-      summary: Delete a contact by ID.
-      operationId: removeContact
+        - Party
+      summary: Delete a party by ID.
+      operationId: removeParty
       responses:
         200:
-          description: Successfully deleted the contact.
+          description: Successfully deleted the party.
           content:
             application/json:
               schema:
@@ -136,19 +136,19 @@ paths:
         403:
           description: Forbidden.
       parameters:
-        - $ref: '#/components/parameters/contactId'
+        - $ref: '#/components/parameters/partyId'
     get:
       tags:
-        - Contacts
-      summary: Get the Contact by ID.
-      operationId: getContact
+        - Party
+      summary: Get the Party by ID.
+      operationId: getParty
       responses:
         200:
-          description: Successfully fetched the contact.
+          description: Successfully fetched the party.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/Party'
         400:
           description: Bad request.
         401:
@@ -156,26 +156,26 @@ paths:
         403:
           description: Forbidden.
         404:
-          description: Contact does not exist.
+          description: Party does not exist.
       parameters:
-        - $ref: '#/components/parameters/contactId'
+        - $ref: '#/components/parameters/partyId'
     put:
       tags:
-        - Contacts
-      summary: Update a contact
-      operationId: updateContact
+        - Contact
+      summary: Update a party
+      operationId: updateParty
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Contact'
+              $ref: '#/components/schemas/Party'
       responses:
         200:
-          description: Contact successfully updated.
+          description: Party successfully updated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/Party'
         400:
           description: Bad request.
         401:
@@ -183,23 +183,23 @@ paths:
         403:
           description: Forbidden.
         404:
-          description: Contact does not exist.
+          description: Party does not exist.
       parameters:
-        - $ref: '#/components/parameters/contactId'
+        - $ref: '#/components/parameters/partyId'
 
-  /contacts/{contactId}/relations:
+  /parties/{partyId}/relations:
     get:
       tags:
-        - Contact
-      summary: Get relationships by the contact ID.
-      operationId: getContactRelationships
+        - Party
+      summary: Get relationships by the party ID.
+      operationId: getPartyRelationships
       responses:
         200:
-          description: Successfully fetched the contact's relationships.
+          description: Successfully fetched the party's relationships.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BasicContactRelationship'
+                $ref: '#/components/schemas/PartyRelationship'
         400:
           description: Bad request.
         401:
@@ -207,31 +207,31 @@ paths:
         403:
           description: Forbidden.
         404:
-          description: Contact does not exist.
+          description: Party does not exist.
       parameters:
-        - $ref: '#/components/parameters/contactId'
+        - $ref: '#/components/parameters/partyId'
 
-  /contact-types:
+  /party-types:
     get:
       tags:
-        - ContactType
-      summary: Get the contact-types by given parameters
-      operationId: getContactTypes
+        - PartyType
+      summary: Get the party-types by given parameters
+      operationId: getPartyTypes
       parameters:
         - name: filter
           in: query
           required: false
           schema:
-            $ref: '#/components/schemas/FindContactType'
+            $ref: '#/components/schemas/FindPartyType'
       responses:
         200:
-          description: Successfully fetched contact-types.
+          description: Successfully fetched party-types.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ContactType'
+                  $ref: '#/components/schemas/PartyType'
         400:
           description: Bad request.
         401:
@@ -240,21 +240,21 @@ paths:
           description: Forbidden.
     post:
       tags:
-        - ContactType
-      summary: Add a new contact-type
-      operationId: addContactType
+        - PartyType
+      summary: Add a new party-type
+      operationId: addPartyType
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddContactType'
+              $ref: '#/components/schemas/NonPersistedPartyType'
       responses:
         201:
-          description: contact-type successfully created.
+          description: Party-type successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactType'
+                $ref: '#/components/schemas/PartyType'
         400:
           description: Bad request.
         401:
@@ -262,15 +262,15 @@ paths:
         403:
           description: Forbidden.
 
-  /contact-types/{contactTypeId}:
+  /party-types/{partyTypeId}:
     delete:
       tags:
-        - ContactType
-      summary: Delete a contact-type by ID.
-      operationId: removeContactType
+        - PartyType
+      summary: Delete a party-type by ID.
+      operationId: removePartyType
       responses:
         200:
-          description: Successfully deleted the contact-type.
+          description: Successfully deleted the party-type.
           content:
             application/json:
               schema:
@@ -282,12 +282,12 @@ paths:
         403:
           description: Forbidden.
         404:
-          description: ContactType does not exist.
+          description: PartyType does not exist.
       parameters:
-        - $ref: '#/components/parameters/contactTypeId'
+        - $ref: '#/components/parameters/partyTypeId'
     get:
       tags:
-        - ContactType
+        - PartyType
       summary: Get the contact-type by ID.
       operationId: getContactType
       responses:
@@ -296,7 +296,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactType'
+                $ref: '#/components/schemas/PartyType'
         400:
           description: Bad request.
         401:
@@ -304,26 +304,26 @@ paths:
         403:
           description: Forbidden.
         404:
-          description: Identity does not exist.
+          description: PartyType does not exist.
       parameters:
-        - $ref: '#/components/parameters/contactTypeId'
+        - $ref: '#/components/parameters/partyTypeId'
     put:
       tags:
-        - ContactType
-      summary: Update a contact-type
-      operationId: updateContactType
+        - PartyType
+      summary: Update a party-type
+      operationId: updatePartyType
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ContactType'
+              $ref: '#/components/schemas/PartyType'
       responses:
         200:
-          description: ContactType successfully updated.
+          description: PartyType successfully updated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactType'
+                $ref: '#/components/schemas/PartyType'
         400:
           description: Bad request.
         401:
@@ -331,9 +331,9 @@ paths:
         403:
           description: Forbidden.
         404:
-          description: ContactType does not exist.
+          description: PartyType does not exist.
       parameters:
-        - $ref: '#/components/parameters/contactTypeId'
+        - $ref: '#/components/parameters/partyTypeId'
 
   /identities:
     get:
@@ -382,7 +382,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddIdentity'
+              $ref: '#/components/schemas/NonPersistedIdentity'
       responses:
         201:
           description: Identity successfully created.
@@ -490,7 +490,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ContactRelationship'
+                  $ref: '#/components/schemas/PartyRelationship'
         400:
           description: Bad request.
         401:
@@ -508,14 +508,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddRelationship'
+              $ref: '#/components/schemas/NonPersistedPartyRelationship'
       responses:
         201:
           description: Relationship successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactRelationship'
+                $ref: '#/components/schemas/PartyRelationship'
         400:
           description: Bad request.
         401:
@@ -557,7 +557,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactRelationship'
+                $ref: '#/components/schemas/PartyRelationship'
         400:
           description: Bad request.
         401:
@@ -577,14 +577,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddRelationship'
+              $ref: '#/components/schemas/NonPersistedPartyRelationship'
       responses:
         200:
           description: Relationship successfully updated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactRelationship'
+                $ref: '#/components/schemas/PartyRelationship'
         400:
           description: Bad request.
         401:
@@ -602,18 +602,18 @@ components:
       # we need to introduce additional properties to almost every object
   parameters:
 
-    contactId:
-      name: contactId
+    partyId:
+      name: partyId
       in: path
-      description: The id of the contact.
+      description: The id of the party.
       required: true
       schema:
         type: string
       example: 280fe02a-3b9a-11eb-adc1-0242ac120002
-    contactTypeId:
-      name: contactTypeId
+    partyTypeId:
+      name: partyTypeId
       in: path
-      description: The id of the contact-type.
+      description: The id of the party-type.
       required: true
       schema:
         type: string
@@ -637,150 +637,6 @@ components:
       example: 091fe02a-3ml1-nb6b-a9ht-0242ac15632
 
   schemas:
-    AddContact:
-      type: object
-      properties:
-        name:
-          type: string
-        alias:
-          type: string
-        uri:
-          type: string
-        identities:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasicIdentity'
-
-    AddContactType:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ContactTypeEnum'
-        name:
-          type: string
-        tenantId:
-          type: string
-        description:
-          type: string
-
-    AddIdentity:
-      type: object
-      properties:
-        contactId:
-          type: string
-        identity:
-          $ref: '#/components/schemas/BasicIdentity'
-
-    AddRelationship:
-      type: object
-      properties:
-        leftId:
-          type: string
-        rightId:
-          type: string
-
-    BasicContactRelationship:
-      type: object
-      properties:
-        leftId:
-          type: string
-        rightId:
-          type: string
-
-    BasicConnection:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ConnectionTypeEnum'
-        config:
-          $ref: '#/components/schemas/BasicConnectionConfig'
-      required:
-        - type
-        - config
-
-    BasicConnectionConfig:
-      oneOf:
-        - $ref: '#/components/schemas/BasicDidAuthConfig'
-        - $ref: '#/components/schemas/BasicOpenIdConfig'
-
-    BasicCorrelationIdentifier:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CorrelationIdentifierEnum'
-        correlationId:
-          type: string
-      required:
-        - type
-        - correlationId
-
-    BasicDidAuthConfig:
-      type: object
-      properties:
-        identifier:
-          $ref: '#/components/schemas/Identifier'
-        stateId:
-          type: string
-        redirectUrl:
-          type: string
-        sessionId:
-          type: string
-      required:
-        - identifier
-        - stateId
-        - redirectUrl
-        - sessionId
-
-    BasicIdentity:
-      type: object
-      properties:
-        alias:
-          type: string
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityRoleEnum'
-        identifier:
-          $ref: '#/components/schemas/BasicCorrelationIdentifier'
-        connection:
-          $ref: '#/components/schemas/BasicConnection'
-        metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/BasicMetadataItem'
-
-    BasicMetadataItem:
-      type: object
-      properties:
-        label:
-          type: string
-    BasicOpenIdConfig:
-      type: object
-      properties:
-        clientId:
-          type: string
-        clientSecret:
-          type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        issuer:
-          type: string
-        redirectUrl:
-          type: string
-        dangerouslyAllowInsecureHttpRequests:
-          type: boolean
-        clientAuthMethod:
-          $ref: '#/components/schemas/ClientAuthMethodEnum'
-      required:
-        - clientId
-        - clientSecret
-        - scopes
-        - issuer
-        - redirectUrl
-        - dangerouslyAllowInsecureHttpRequests
-
     ClientAuthMethodEnum:
       type: string
       enum:
@@ -793,10 +649,15 @@ components:
       properties:
         id:
           type: string
+          example: 9c28e9bc-4d84-11ee-be56-0242ac120002
         type:
           $ref: '#/components/schemas/ConnectionTypeEnum'
         config:
           $ref: '#/components/schemas/ConnectionConfig'
+      required:
+        - id
+        - type
+        - config
 
     ConnectionConfig:
       oneOf:
@@ -811,88 +672,25 @@ components:
         - SIOPv2+OpenID4VP
 
     Contact:
-      type: object
-      properties:
-        id:
-          type: string
-        uri:
-          type: string
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityRoleEnum'
-        identities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Identity'
-        contactOwner:
-          oneOf:
-            - $ref: '#/components/schemas/Person'
-            - $ref: '#/components/schemas/Organization'
-        contactType:
-          $ref: '#/components/schemas/ContactType'
-        relationships:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContactRelationship'
-        createdAt:
-          type: string
-          format: date-time
-        lastUpdatedAt:
-          type: string
-          format: date-time
-
-    ContactRelationship:
-      type: object
-      properties:
-        id:
-          type: string
-        leftId:
-          type: string
-        rightId:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        lastUpdatedAt:
-          type: string
-          format: date-time
-
-    ContactType:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          $ref: '#/components/schemas/ContactTypeEnum'
-        name:
-          type: string
-        tenantId:
-          type: string
-        description:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        lastUpdatedAt:
-          type: string
-          format: date-time
-
-    ContactTypeEnum:
-      type: string
-      enum:
-        - person
-        - organization
+      oneOf:
+        - $ref: '#/components/schemas/NaturalPerson'
+        - $ref: '#/components/schemas/Organization'
 
     CorrelationIdentifier:
       type: object
       properties:
         id:
           type: string
+          example: c169571e-4d86-11ee-be56-0242ac120002
         type:
           $ref: '#/components/schemas/CorrelationIdentifierEnum'
         correlationId:
           type: string
+          example: ca8a7df0-4d86-11ee-be56-0242ac120002
+      required:
+        - id
+        - type
+        - correlationId
 
     CorrelationIdentifierEnum:
       type: string
@@ -905,29 +703,39 @@ components:
       properties:
         id:
           type: string
+          example: ec9670e8-4d86-11ee-be56-0242ac120002
         identifier:
           $ref: '#/components/schemas/Identifier'
         stateId:
           type: string
+          example: f222f536-4d86-11ee-be56-0242ac120002
         redirectUrl:
           type: string
+          example: https://redirect.to
         sessionId:
           type: string
+          example: 08306df4-4d87-11ee-be56-0242ac120002
+      required:
+        - id
+        - identifier
+        - stateId
+        - redirectUrl
+        - sessionId
 
-    FindContact:
-      type: array
-      items:
-        $ref: '#/components/schemas/FindOptionsWhere'
-
-    FindContactType:
-      type: array
-      items:
-        $ref: '#/components/schemas/FindOptionsWhere'
+    ElectronicAddressType:
+      type: string
+      enum:
+        - email
 
     FindIdentity:
       type: array
       items:
         $ref: '#/components/schemas/FindOptionsWhere'
+
+    FindOptionsWhere:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/FindOptionsWhereProperty'
 
     FindOptionsWhereProperty:
       type: object
@@ -951,10 +759,20 @@ components:
             type: string
             example: [ Johnson, Williams ]
 
-    FindOptionsWhere:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/FindOptionsWhereProperty'
+    FindParty:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+      example:
+        - contact:
+            firstName: default_first_name
+        - contact:
+            middleName: default_middle_name
+
+    FindPartyType:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
 
     FindRelationship:
       # not sure what to put here
@@ -983,6 +801,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Service'
+      required:
+        - did
+        - provider
+        - keys
+        - services
 
     Identity:
       type: object
@@ -1009,6 +832,13 @@ components:
         lastUpdatedAt:
           type: string
           format: date-time
+      required:
+        - id
+        - alias
+        - roles
+        - identifier
+        - createdAt
+        - lastUpdatedAt
 
     IdentityRoleEnum:
       type: string
@@ -1036,6 +866,11 @@ components:
           description: Optional. Private key
         meta:
           $ref: '#/components/schemas/KeyMetadata'
+      required:
+        - kid
+        - kms
+        - type
+        - publicKeyHex
 
     KeyMetadata:
       type: object
@@ -1054,6 +889,239 @@ components:
           type: string
         value:
           type: string
+      required:
+        - id
+        - label
+        - value
+
+    NaturalPerson:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 06116a16-4d85-11ee-be56-0242ac120002
+        firstName:
+          type: string
+          example: 'Jane'
+        lastName:
+          type: string
+          example: 'Doe'
+        middleName:
+          type: string
+          example: 'Harper'
+        displayName:
+          type: string
+          example: 'Jane Harper Doe'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - firstName
+        - lastName
+        - displayName
+        - createdAt
+        - lastUpdatedAt
+
+    NonPersistedConnection:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ConnectionTypeEnum'
+        config:
+          $ref: '#/components/schemas/NonPersistedConnectionConfig'
+      required:
+        - type
+        - config
+
+    NonPersistedConnectionConfig:
+      oneOf:
+        - $ref: '#/components/schemas/NonPersistedOpenIdConfig'
+        - $ref: '#/components/schemas/NonPersistedDidAuthConfig'
+
+    NonPersistedContact:
+      oneOf:
+        - $ref: '#/components/schemas/NonPersistedNaturalPerson'
+        - $ref: '#/components/schemas/NonPersistedOrganization'
+
+    NonPersistedCorrelationIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CorrelationIdentifierEnum'
+        correlationId:
+          type: string
+      required:
+        - type
+        - correlationId
+
+    NonPersistedDidAuthConfig:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        stateId:
+          type: string
+        redirectUrl:
+          type: string
+        sessionId:
+          type: string
+      required:
+        - identifier
+        - stateId
+        - redirectUrl
+        - sessionId
+
+    NonPersistedElectronicAddress:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ElectronicAddressType'
+        electronicAddress:
+          type: string
+      required:
+        - type
+        - electronicAddress
+
+    NonPersistedIdentity:
+      type: object
+      properties:
+        alias:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identifier:
+          $ref: '#/components/schemas/NonPersistedCorrelationIdentifier'
+        connection:
+          $ref: '#/components/schemas/NonPersistedConnection'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedMetadataItem'
+      required:
+        - identifier
+        - alias
+
+    NonPersistedMetadataItem:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+      required:
+        - label
+        - value
+
+    NonPersistedNaturalPerson:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        displayName:
+          type: string
+      required:
+        - firstName
+        - lastName
+        - displayName
+
+    NonPersistedOpenIdConfig:
+      type: object
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        issuer:
+          type: string
+        redirectUrl:
+          type: string
+        dangerouslyAllowInsecureHttpRequests:
+          type: boolean
+        clientAuthMethod:
+          $ref: '#/components/schemas/ClientAuthMethodEnum'
+      required:
+        - clientId
+        - clientSecret
+        - scopes
+        - issuer
+        - redirectUrl
+        - dangerouslyAllowInsecureHttpRequests
+        - clientAuthMethod
+
+    NonPersistedOrganization:
+      type: object
+      properties:
+        legalName:
+          type: string
+        displayName:
+          type: string
+      required:
+        - legalName
+        - displayName
+
+    NonPersistedParty:
+      type: object
+      properties:
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedIdentity'
+        electronicAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedElectronicAddress'
+        contact:
+          $ref: '#/components/schemas/NonPersistedContact'
+        partyType:
+          $ref: '#/components/schemas/NonPersistedPartyType'
+        relationships:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedPartyRelationship'
+      required:
+        - contact
+        - partyType
+
+    NonPersistedPartyRelationship:
+      type: object
+      properties:
+        leftId:
+          type: string
+          example: 8271dc46-4d83-11ee-be56-0242ac120002
+        rightId:
+          type: string
+          example: 90305c68-4d83-11ee-be56-0242ac120002
+      required:
+        - leftId
+        - rightId
+
+    NonPersistedPartyType:
+      allOf:
+        - $ref: '#/components/schemas/PartyType'
+        - type: object
+          properties:
+            id:
+              type: string
+          required:
+            - type
+            - name
+            - tenantId
 
     OpenIdConfig:
       type: object
@@ -1076,44 +1144,155 @@ components:
           type: boolean
         clientAuthMethod:
           $ref: '#/components/schemas/ClientAuthMethodEnum'
+      required:
+        - id
+        - clientId
+        - clientSecret
+        - scopes
+        - issuer
+        - redirectUrl
+        - dangerouslyAllowInsecureHttpRequests
+        - clientAuthMethod
 
     Organization:
       type: object
       properties:
         id:
           type: string
+          example: c4a3659c-4d85-11ee-be56-0242ac120002
         legalName:
           type: string
+          example: Sphereon BV
         displayName:
           type: string
-        cocNumber:
-          type: string
+          example: Sphereon
         createdAt:
           type: string
           format: date-time
+          example: '2023-09-07T14:15:30Z'
         lastUpdatedAt:
           type: string
           format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - legalName
+        - displayName
+        - createdAt
+        - lastUpdatedAt
 
-    Person:
+    Party:
       type: object
       properties:
         id:
           type: string
-        firstName:
+          example: '0605761c-4113-4ce5-a6b2-9cbae2f9d285'
+        uri:
           type: string
-        lastName:
+          example: 'example.com'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity'
+        electronicAddresses:
+          type: array
+          items:
+            type: string
+        contact:
+          $ref: '#/components/schemas/Contact'
+        partyType:
+          $ref: '#/components/schemas/PartyType'
+        relationships:
           type: string
-        middleName:
-          type: string
-        displayName:
-          type: string
+          example: ''
         createdAt:
           type: string
           format: date-time
+          example: '2023-09-07T14:15:30Z'
         lastUpdatedAt:
           type: string
           format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - roles
+        - identities
+        - electronicAddresses
+        - contact
+        - partyType
+        - relationships
+        - createdAt
+        - lastUpdatedAt
+
+    PartyRelationship:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 5f339a14-4d86-11ee-be56-0242ac120002
+        leftId:
+          type: string
+          example: 6443402c-4d86-11ee-be56-0242ac120002
+        rightId:
+          type: string
+          example: 6b0340f6-4d86-11ee-be56-0242ac120002
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - leftId
+        - rightId
+        - createdAt
+        - lastUpdatedAt
+
+    PartyType:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'hg45161c-6513-476l-1hb2-6da652f9dnri5'
+        type:
+          $ref: '#/components/schemas/PartyTypeEnum'
+        name:
+          type: string
+          example: 'Example party type'
+        tenantId:
+          type: string
+          example: '8245161c-jh13-4gzl-a6b2-h5fae2f9d285'
+        description:
+          type: string
+          example: 'Simple description'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - type
+        - name
+        - tenantId
+        - createdAt
+        - lastUpdatedAt
+
+    PartyTypeEnum:
+      type: string
+      enum:
+        - naturalPerson
+        - organization
 
     Service:
       type: object
@@ -1129,6 +1308,10 @@ components:
             - type: object
         description:
           type: string
+      required:
+        - id
+        - type
+        - serviceEndpoint
 
     TKeyType:
       type: string
