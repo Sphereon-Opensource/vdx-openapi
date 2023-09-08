@@ -33,17 +33,23 @@ tags:
   - name: Party
     description: Endpoints related to the entity party
     externalDocs:
-      description: Find out more
       url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
   - name: Identity
     description: Endpoints related to the entity identity
     externalDocs:
-      description: Find out more
       url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
   - name: Relationship
     description: Endpoints related to the entity relationship
-  - name: ContactType
-    description: Endpoints related to the entity contact type
+    externalDocs:
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
+  - name: PartyType
+    description: Endpoints related to the entity party type
+    externalDocs:
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
 paths:
   /parties:
     get:
@@ -72,7 +78,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PartyRelationship'
+                  $ref: '#/components/schemas/Party'
                 example:
                   - contactType:
                       type: 'naturalPerson'
@@ -161,7 +167,7 @@ paths:
         - $ref: '#/components/parameters/partyId'
     put:
       tags:
-        - Contact
+        - Party
       summary: Update a party
       operationId: updateParty
       requestBody:
@@ -288,11 +294,11 @@ paths:
     get:
       tags:
         - PartyType
-      summary: Get the contact-type by ID.
-      operationId: getContactType
+      summary: Get the party-type by ID.
+      operationId: getPartyType
       responses:
         200:
-          description: Successfully fetched the identity.
+          description: Successfully fetched the partyType.
           content:
             application/json:
               schema:
