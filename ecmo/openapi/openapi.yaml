@@ -1,0 +1,1331 @@
+openapi: 3.0.3
+info:
+  description: External Contact Manager Openapi from Verifiable Data Exchange
+  version: '0.1.0'
+  title: External Contact Manager Openapi
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+servers:
+  - url: '{protocol}://{environment}.vdx.sphereon.io:{port}/{projectName}/v1'
+    variables:
+      protocol:
+        default: https
+        enum:
+          - http
+          - https
+      environment:
+        default: api.dev
+        enum:
+          - api         # Production server
+          - api.dev     # Development server
+          - api.staging # Staging server
+      projectName:
+        default: ecmo
+        description: External Contact Manager Openapi
+      port:
+        default: '443'
+        enum:
+          - '443'
+          - '8443'
+tags:
+  - name: Party
+    description: Endpoints related to the entity party
+    externalDocs:
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
+  - name: Identity
+    description: Endpoints related to the entity identity
+    externalDocs:
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
+  - name: Relationship
+    description: Endpoints related to the entity relationship
+    externalDocs:
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
+  - name: PartyType
+    description: Endpoints related to the entity party type
+    externalDocs:
+      url: https://github.com/Sphereon-Open-Source/SSI-SDK
+      description: Find out more
+paths:
+  /parties:
+    get:
+      tags:
+        - Party
+      summary: Get the parties by given parameters
+      operationId: getParties
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindParty'
+          example:
+            filter:
+              - contact:
+                  firstName: default_first_name
+              - contact:
+                  middleName: default_middle_name
+
+      responses:
+        200:
+          description: Successfully fetched parties.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Party'
+                example:
+                  - contactType:
+                      type: 'naturalPerson'
+                      tenantId: 0605761c-4113-4ce5-a6b2-9cbae2f9d287
+                      name: relation_contact_type_name
+                      description: new_description
+                    contact:
+                      firstName: relation_first_name
+                      middleName: relation_middle_name
+                      lastName: relation_last_name
+                      displayName: relation_display_name
+                    uri: example.com
+
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+    post:
+      tags:
+        - Party
+      summary: Add a new party
+      operationId: addParty
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonPersistedParty'
+      responses:
+        201:
+          description: Party successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+
+  /parties/{partyId}:
+    delete:
+      tags:
+        - Party
+      summary: Delete a party by ID.
+      operationId: removeParty
+      responses:
+        200:
+          description: Successfully deleted the party.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+      parameters:
+        - $ref: '#/components/parameters/partyId'
+    get:
+      tags:
+        - Party
+      summary: Get the Party by ID.
+      operationId: getParty
+      responses:
+        200:
+          description: Successfully fetched the party.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Party does not exist.
+      parameters:
+        - $ref: '#/components/parameters/partyId'
+    put:
+      tags:
+        - Party
+      summary: Update a party
+      operationId: updateParty
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Party'
+      responses:
+        200:
+          description: Party successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Party'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Party does not exist.
+      parameters:
+        - $ref: '#/components/parameters/partyId'
+
+  /parties/{partyId}/relations:
+    get:
+      tags:
+        - Party
+      summary: Get relationships by the party ID.
+      operationId: getPartyRelationships
+      responses:
+        200:
+          description: Successfully fetched the party's relationships.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Party does not exist.
+      parameters:
+        - $ref: '#/components/parameters/partyId'
+
+  /party-types:
+    get:
+      tags:
+        - PartyType
+      summary: Get the party-types by given parameters
+      operationId: getPartyTypes
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindPartyType'
+      responses:
+        200:
+          description: Successfully fetched party-types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartyType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+    post:
+      tags:
+        - PartyType
+      summary: Add a new party-type
+      operationId: addPartyType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonPersistedPartyType'
+      responses:
+        201:
+          description: Party-type successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+
+  /party-types/{partyTypeId}:
+    delete:
+      tags:
+        - PartyType
+      summary: Delete a party-type by ID.
+      operationId: removePartyType
+      responses:
+        200:
+          description: Successfully deleted the party-type.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: PartyType does not exist.
+      parameters:
+        - $ref: '#/components/parameters/partyTypeId'
+    get:
+      tags:
+        - PartyType
+      summary: Get the party-type by ID.
+      operationId: getPartyType
+      responses:
+        200:
+          description: Successfully fetched the partyType.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: PartyType does not exist.
+      parameters:
+        - $ref: '#/components/parameters/partyTypeId'
+    put:
+      tags:
+        - PartyType
+      summary: Update a party-type
+      operationId: updatePartyType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyType'
+      responses:
+        200:
+          description: PartyType successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyType'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: PartyType does not exist.
+      parameters:
+        - $ref: '#/components/parameters/partyTypeId'
+
+  /identities:
+    get:
+      tags:
+        - Identity
+      summary: Get the identities by given parameters
+      operationId: getIdentities
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindIdentity'
+          example:
+            filter:
+              - eq:
+                  alias: alias1
+              - like:
+                  alias: alias1
+              - in:
+                  alias:
+                    - alias1
+                    - alias2
+
+      responses:
+        200:
+          description: Successfully fetched identites.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+    post:
+      tags:
+        - Identity
+      summary: Add a new identity
+      operationId: addIdentity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonPersistedIdentity'
+      responses:
+        201:
+          description: Identity successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+
+  /identities/{identityId}:
+    delete:
+      tags:
+        - Identity
+      summary: Delete a identity by ID.
+      operationId: removeIdentity
+      responses:
+        200:
+          description: Successfully deleted the identity.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Identity does not exist.
+      parameters:
+        - $ref: '#/components/parameters/identityId'
+    get:
+      tags:
+        - Identity
+      summary: Get the Identity by ID.
+      operationId: getIdentity
+      responses:
+        200:
+          description: Successfully fetched the identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Identity does not exist.
+      parameters:
+        - $ref: '#/components/parameters/identityId'
+    put:
+      tags:
+        - Identity
+      summary: Update a identity
+      operationId: updateIdentity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Identity'
+      responses:
+        200:
+          description: Identity successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Identity does not exist.
+      parameters:
+        - $ref: '#/components/parameters/identityId'
+
+  /relations:
+    get:
+      tags:
+        - Relationship
+      summary: Get the relationships by criteria.
+      operationId: getRelationships
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/FindRelationship'
+      responses:
+        200:
+          description: Successfully fetched the relationships.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartyRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Relationship does not exist.
+    post:
+      tags:
+        - Relationship
+      summary: Add a new relationship
+      operationId: addRelationship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonPersistedPartyRelationship'
+      responses:
+        201:
+          description: Relationship successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+
+  /relations/{relationId}:
+    delete:
+      tags:
+        - Relationship
+      summary: Delete a relationship by ID.
+      operationId: removeRelationship
+      responses:
+        200:
+          description: Successfully deleted the relationship.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Relationship does not exist.
+      parameters:
+        - $ref: '#/components/parameters/relationId'
+    get:
+      tags:
+        - Relationship
+      summary: Get the relationship by ID.
+      operationId: getRelationship
+      responses:
+        200:
+          description: Successfully fetched the relationship.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+        404:
+          description: Relationship does not exist.
+      parameters:
+        - $ref: '#/components/parameters/relationId'
+    put:
+      tags:
+        - Relationship
+      summary: Update a relationship
+      operationId: updateRelationship
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NonPersistedPartyRelationship'
+      responses:
+        200:
+          description: Relationship successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyRelationship'
+        400:
+          description: Bad request.
+        401:
+          description: Unauthorized.
+        403:
+          description: Forbidden.
+      parameters:
+        - $ref: '#/components/parameters/relationId'
+
+components:
+  securitySchemes:
+    access_token:
+      type: http
+      scheme: bearer
+      # we need to introduce additional properties to almost every object
+  parameters:
+
+    partyId:
+      name: partyId
+      in: path
+      description: The id of the party.
+      required: true
+      schema:
+        type: string
+      example: 280fe02a-3b9a-11eb-adc1-0242ac120002
+    partyTypeId:
+      name: partyTypeId
+      in: path
+      description: The id of the party-type.
+      required: true
+      schema:
+        type: string
+      example: 68jfe02a-mb9w-11eb-rdq1-22i1ad18020v
+    identityId:
+      name: identityId
+      in: path
+      description: The id of the identity.
+      required: true
+      schema:
+        type: string
+      example: 760fe02a-nv6a-1lk9-poa1-0242ac10912
+
+    relationId:
+      name: relationId
+      in: path
+      description: The id of the relationship.
+      required: true
+      schema:
+        type: string
+      example: 091fe02a-3ml1-nb6b-a9ht-0242ac15632
+
+  schemas:
+    ClientAuthMethodEnum:
+      type: string
+      enum:
+        - basic
+        - post
+        - undefined
+
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 9c28e9bc-4d84-11ee-be56-0242ac120002
+        type:
+          $ref: '#/components/schemas/ConnectionTypeEnum'
+        config:
+          $ref: '#/components/schemas/ConnectionConfig'
+      required:
+        - id
+        - type
+        - config
+
+    ConnectionConfig:
+      oneOf:
+        - $ref: '#/components/schemas/OpenIdConfig'
+        - $ref: '#/components/schemas/DidAuthConfig'
+
+    ConnectionTypeEnum:
+      type: string
+      enum:
+        - OIDC
+        - SIOPv2
+        - SIOPv2+OpenID4VP
+
+    Contact:
+      oneOf:
+        - $ref: '#/components/schemas/NaturalPerson'
+        - $ref: '#/components/schemas/Organization'
+
+    CorrelationIdentifier:
+      type: object
+      properties:
+        id:
+          type: string
+          example: c169571e-4d86-11ee-be56-0242ac120002
+        type:
+          $ref: '#/components/schemas/CorrelationIdentifierEnum'
+        correlationId:
+          type: string
+          example: ca8a7df0-4d86-11ee-be56-0242ac120002
+      required:
+        - id
+        - type
+        - correlationId
+
+    CorrelationIdentifierEnum:
+      type: string
+      enum:
+        - did
+        - url
+
+    DidAuthConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ec9670e8-4d86-11ee-be56-0242ac120002
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        stateId:
+          type: string
+          example: f222f536-4d86-11ee-be56-0242ac120002
+        redirectUrl:
+          type: string
+          example: https://redirect.to
+        sessionId:
+          type: string
+          example: 08306df4-4d87-11ee-be56-0242ac120002
+      required:
+        - id
+        - identifier
+        - stateId
+        - redirectUrl
+        - sessionId
+
+    ElectronicAddressType:
+      type: string
+      enum:
+        - email
+
+    FindIdentity:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+
+    FindOptionsWhere:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/FindOptionsWhereProperty'
+
+    FindOptionsWhereProperty:
+      type: object
+      properties:
+        eq:
+          type: string
+          example: John
+        in:
+          type: array
+          items:
+            type: string
+            example: [ Smith, Doe ]
+        like:
+          type: string
+          example: Smith
+        not:
+          $ref: '#/components/schemas/FindOptionsWhereProperty'
+        notIn:
+          type: array
+          items:
+            type: string
+            example: [ Johnson, Williams ]
+
+    FindParty:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+      example:
+        - contact:
+            firstName: default_first_name
+        - contact:
+            middleName: default_middle_name
+
+    FindPartyType:
+      type: array
+      items:
+        $ref: '#/components/schemas/FindOptionsWhere'
+
+    FindRelationship:
+      # not sure what to put here
+      type: object
+
+    Identifier:
+      type: object
+      properties:
+        did:
+          type: string
+          description: Decentralized identifier
+        alias:
+          type: string
+          description: Optional. Identifier alias. Can be used to reference an object in an external system
+        provider:
+          type: string
+          description: Identifier provider name
+        controllerKeyId:
+          type: string
+          description: Controller key id
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Key'
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+      required:
+        - did
+        - provider
+        - keys
+        - services
+
+    Identity:
+      type: object
+      properties:
+        id:
+          type: string
+        alias:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identifier:
+          $ref: '#/components/schemas/CorrelationIdentifier'
+        connection:
+          $ref: '#/components/schemas/Connection'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataItem'
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - alias
+        - roles
+        - identifier
+        - createdAt
+        - lastUpdatedAt
+
+    IdentityRoleEnum:
+      type: string
+      enum:
+        - issuer
+        - verifier
+        - holder
+
+    Key:
+      type: object
+      properties:
+        kid:
+          type: string
+          description: Key ID
+        kms:
+          type: string
+          description: Key Management System
+        type:
+          $ref: '#/components/schemas/TKeyType'
+        publicKeyHex:
+          type: string
+          description: Public key
+        privateKeyHex:
+          type: string
+          description: Optional. Private key
+        meta:
+          $ref: '#/components/schemas/KeyMetadata'
+      required:
+        - kid
+        - kms
+        - type
+        - publicKeyHex
+
+    KeyMetadata:
+      type: object
+      properties:
+        algorithms:
+          type: array
+          items:
+            type: string
+
+    MetadataItem:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        value:
+          type: string
+      required:
+        - id
+        - label
+        - value
+
+    NaturalPerson:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 06116a16-4d85-11ee-be56-0242ac120002
+        firstName:
+          type: string
+          example: 'Jane'
+        lastName:
+          type: string
+          example: 'Doe'
+        middleName:
+          type: string
+          example: 'Harper'
+        displayName:
+          type: string
+          example: 'Jane Harper Doe'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - firstName
+        - lastName
+        - displayName
+        - createdAt
+        - lastUpdatedAt
+
+    NonPersistedConnection:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ConnectionTypeEnum'
+        config:
+          $ref: '#/components/schemas/NonPersistedConnectionConfig'
+      required:
+        - type
+        - config
+
+    NonPersistedConnectionConfig:
+      oneOf:
+        - $ref: '#/components/schemas/NonPersistedOpenIdConfig'
+        - $ref: '#/components/schemas/NonPersistedDidAuthConfig'
+
+    NonPersistedContact:
+      oneOf:
+        - $ref: '#/components/schemas/NonPersistedNaturalPerson'
+        - $ref: '#/components/schemas/NonPersistedOrganization'
+
+    NonPersistedCorrelationIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/CorrelationIdentifierEnum'
+        correlationId:
+          type: string
+      required:
+        - type
+        - correlationId
+
+    NonPersistedDidAuthConfig:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/Identifier'
+        stateId:
+          type: string
+        redirectUrl:
+          type: string
+        sessionId:
+          type: string
+      required:
+        - identifier
+        - stateId
+        - redirectUrl
+        - sessionId
+
+    NonPersistedElectronicAddress:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ElectronicAddressType'
+        electronicAddress:
+          type: string
+      required:
+        - type
+        - electronicAddress
+
+    NonPersistedIdentity:
+      type: object
+      properties:
+        alias:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identifier:
+          $ref: '#/components/schemas/NonPersistedCorrelationIdentifier'
+        connection:
+          $ref: '#/components/schemas/NonPersistedConnection'
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedMetadataItem'
+      required:
+        - identifier
+        - alias
+
+    NonPersistedMetadataItem:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+      required:
+        - label
+        - value
+
+    NonPersistedNaturalPerson:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        displayName:
+          type: string
+      required:
+        - firstName
+        - lastName
+        - displayName
+
+    NonPersistedOpenIdConfig:
+      type: object
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        issuer:
+          type: string
+        redirectUrl:
+          type: string
+        dangerouslyAllowInsecureHttpRequests:
+          type: boolean
+        clientAuthMethod:
+          $ref: '#/components/schemas/ClientAuthMethodEnum'
+      required:
+        - clientId
+        - clientSecret
+        - scopes
+        - issuer
+        - redirectUrl
+        - dangerouslyAllowInsecureHttpRequests
+        - clientAuthMethod
+
+    NonPersistedOrganization:
+      type: object
+      properties:
+        legalName:
+          type: string
+        displayName:
+          type: string
+      required:
+        - legalName
+        - displayName
+
+    NonPersistedParty:
+      type: object
+      properties:
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedIdentity'
+        electronicAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedElectronicAddress'
+        contact:
+          $ref: '#/components/schemas/NonPersistedContact'
+        partyType:
+          $ref: '#/components/schemas/NonPersistedPartyType'
+        relationships:
+          type: array
+          items:
+            $ref: '#/components/schemas/NonPersistedPartyRelationship'
+      required:
+        - contact
+        - partyType
+
+    NonPersistedPartyRelationship:
+      type: object
+      properties:
+        leftId:
+          type: string
+          example: 8271dc46-4d83-11ee-be56-0242ac120002
+        rightId:
+          type: string
+          example: 90305c68-4d83-11ee-be56-0242ac120002
+      required:
+        - leftId
+        - rightId
+
+    NonPersistedPartyType:
+      allOf:
+        - $ref: '#/components/schemas/PartyType'
+        - type: object
+          properties:
+            id:
+              type: string
+          required:
+            - type
+            - name
+            - tenantId
+
+    OpenIdConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        issuer:
+          type: string
+        redirectUrl:
+          type: string
+        dangerouslyAllowInsecureHttpRequests:
+          type: boolean
+        clientAuthMethod:
+          $ref: '#/components/schemas/ClientAuthMethodEnum'
+      required:
+        - id
+        - clientId
+        - clientSecret
+        - scopes
+        - issuer
+        - redirectUrl
+        - dangerouslyAllowInsecureHttpRequests
+        - clientAuthMethod
+
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          example: c4a3659c-4d85-11ee-be56-0242ac120002
+        legalName:
+          type: string
+          example: Sphereon BV
+        displayName:
+          type: string
+          example: Sphereon
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - legalName
+        - displayName
+        - createdAt
+        - lastUpdatedAt
+
+    Party:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '0605761c-4113-4ce5-a6b2-9cbae2f9d285'
+        uri:
+          type: string
+          example: 'example.com'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityRoleEnum'
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity'
+        electronicAddresses:
+          type: array
+          items:
+            type: string
+        contact:
+          $ref: '#/components/schemas/Contact'
+        partyType:
+          $ref: '#/components/schemas/PartyType'
+        relationships:
+          type: string
+          example: ''
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - roles
+        - identities
+        - electronicAddresses
+        - contact
+        - partyType
+        - relationships
+        - createdAt
+        - lastUpdatedAt
+
+    PartyRelationship:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 5f339a14-4d86-11ee-be56-0242ac120002
+        leftId:
+          type: string
+          example: 6443402c-4d86-11ee-be56-0242ac120002
+        rightId:
+          type: string
+          example: 6b0340f6-4d86-11ee-be56-0242ac120002
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - leftId
+        - rightId
+        - createdAt
+        - lastUpdatedAt
+
+    PartyType:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'hg45161c-6513-476l-1hb2-6da652f9dnri5'
+        type:
+          $ref: '#/components/schemas/PartyTypeEnum'
+        name:
+          type: string
+          example: 'Example party type'
+        tenantId:
+          type: string
+          example: '8245161c-jh13-4gzl-a6b2-h5fae2f9d285'
+        description:
+          type: string
+          example: 'Simple description'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+        lastUpdatedAt:
+          type: string
+          format: date-time
+          example: '2023-09-07T14:15:30Z'
+      required:
+        - id
+        - type
+        - name
+        - tenantId
+        - createdAt
+        - lastUpdatedAt
+
+    PartyTypeEnum:
+      type: string
+      enum:
+        - naturalPerson
+        - organization
+
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        serviceEndpoint:
+          type: object
+          anyOf:
+            - type: string
+            - type: object
+        description:
+          type: string
+      required:
+        - id
+        - type
+        - serviceEndpoint
+
+    TKeyType:
+      type: string
+      enum:
+        - Ed25519
+        - Secp256k1
+        - Secp256r1
+        - X25519
+        - Bls12381G1
+        - Bls12381G2
+        - RSA

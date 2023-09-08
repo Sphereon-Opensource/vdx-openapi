@@ -2,7 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>eimo</artifactId>
+  <artifactId>ecmo</artifactId>
 
   <build>
     <pluginManagement>
@@ -15,7 +15,7 @@
             <configuration>
               <configOptions>
                 <addCompileSourceRoot>true</addCompileSourceRoot>
-                <apiPackage>com.sphereon.vdx.eimo.handler</apiPackage>
+                <apiPackage>com.sphereon.vdx.ecmo.api</apiPackage>
                 <artifactVersion>${project.version}</artifactVersion>
 
                 <artifactVersion>${project.version}</artifactVersion>
@@ -27,18 +27,19 @@
                 <generateModels>true</generateModels>
 
                 <generateSupportingFiles>true</generateSupportingFiles>
+                <ignoreFileOverride>${project.basedir}/target/generated-sources/java/api/.swagger-codegen-ignore</ignoreFileOverride>
+
                 <importMappings>
                   <importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
                 </importMappings>
+                <invokerPackage>com.sphereon.vdx.ecmo.handler</invokerPackage>
+                <modelPackage>com.sphereon.vdx.ecmo.model</modelPackage>
 
-                <invokerPackage>com.sphereon.vdx.eimo.handler</invokerPackage>
-                <modelPackage>com.sphereon.vdx.eimo.model</modelPackage>
                 <output>${project.basedir}/target/sdks/java/api</output>
-
                 <serializableModel>true</serializableModel>
                 <skipOverwrite>false</skipOverwrite>
-                <snapshotVersion>true</snapshotVersion>
 
+                <snapshotVersion>true</snapshotVersion>
                 <typeMappings>
                   <typeMapping>OffsetDateTime=Instant</typeMapping>
                 </typeMappings>
@@ -46,6 +47,7 @@
               </configOptions>
               <generatorName>spring</generatorName>
               <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <output>${project.build.directory}/sdks/java</output>
 
             </configuration>
             <goals>
@@ -68,12 +70,40 @@
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.8.1</version>
       </plugin>
+      <plugin>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <configuration>
+              <additionalProperties>
+                <npmName>@sphereon/vdx.ecmo</npmName>
+                <npmVersion>9.5.1</npmVersion>
+              </additionalProperties>
+              <apiPackage>api</apiPackage>
+              <configOptions>
+                <npmName>@sphereon/vdx.ecmo</npmName>
+                <npmVersion>9.5.1</npmVersion>
+              </configOptions>
+              <generatorName>typescript-fetch</generatorName>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <modelPackage>models</modelPackage>
+              <output>${project.build.directory}/sdks/typescript</output>
+            </configuration>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <id>generate-typescript</id>
+          </execution>
+        </executions>
+        <groupId>org.openapitools</groupId>
+        <version>${openapi-generator-version}</version>
+      </plugin>
     </plugins>
   </build>
 
-  <description>External Identity Management Openapi from Verifiable Data Exchange</description>
+  <description>Verifiable Data Exchange - External Contact Manager Openapi.</description>
   <modelVersion>4.0.0</modelVersion>
-  <name>External Identity Management Openapi</name>
+  <name>External Contact Manager Openapi</name>
 
   <parent>
     <artifactId>vdx-parent</artifactId>
@@ -88,4 +118,16 @@
       <url>https://repo1.maven.org/maven2/</url>
     </pluginRepository>
   </pluginRepositories>
+
+  <properties>
+    <jackson-databind.version>0.2.1</jackson-databind.version>
+
+    <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+    <openapi-codegen-verbose>false</openapi-codegen-verbose>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <springfox-swagger.version>3.0.0</springfox-swagger.version>
+  </properties>
 </project>
