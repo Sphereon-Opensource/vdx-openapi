@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: Assets API
+  description: |-
+    Digital Product Passport (DPP) Assets API, allows you to programmatically manage Assets in the DPP
+  termsOfService: https://sphereon.com/terms/
+  contact:
+    email: dev@sphereon.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.0
+servers:
+  - url: https://dpp.vdx.sphereon.io/api/assets/v1
+tags:
+  - name: Asset
+    description: Manage Assets
+paths:
+  /assets:
+    get:
+      tags:
+        - Asset
+      summary: Get Assets
+      description: Gets Assets
+      operationId: getAssets
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetsResponse'
+        '405':
+          description: Invalid input
+      security:
+        - dpp_auth:
+            - read:assets
+    post:
+      tags:
+        - Asset
+      summary: Add a new Asset
+      description: Add a new Asset
+      operationId: addAsset
+      requestBody:
+        description: Create a new Asset
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asset'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '405':
+          description: Invalid input
+      security:
+        - dpp_auth:
+            - write:assets
+
+  /assets/{assetId}:
+    get:
+      tags:
+        - Asset
+      summary: Gets Asset by ID
+      description: Returns a single Asset
+      operationId: getAssetById
+      parameters:
+        - name: assetId
+          in: path
+          description: ID of Asset to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Asset not found
+      security:
+        - dpp_auth:
+            - read:assets
+    put:
+      tags:
+        - Asset
+      summary: Update an existing asset
+      description: Update an existing Asset by Id
+      operationId: updateAssetById
+      requestBody:
+        description: Update an existent Asset
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asset'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Asset not found
+        '405':
+          description: Validation exception
+      security:
+        - dpp_auth:
+            - write:assets
+    delete:
+      tags:
+        - Asset
+      summary: Deletes an Asset
+      description: delete an Asset by ID
+      operationId: deleteAssetById
+      parameters:
+        - name: assetId
+          in: path
+          description: Asset id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid asset value
+      security:
+        - dpp_auth:
+            - write:assets
+
+components:
+  schemas:
+    Credential:
+      example:
+        {
+          "@context":
+            [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://sphereon-opensource.github.io/contexts/credentials/ddp/roadsalt/v1",
+            ],
+          "id": "http://example.com/credentials/3732",
+          "type": [ "VerifiableCredential", "RoadSaltCredential" ],
+          "issuer": "did:example:123",
+          "issuanceDate": "2023-05-02T22:37:26.544Z",
+          "credentialSubject":
+            {
+              "id": "did:example:123",
+              "name": "Road salt batch 1"
+            }
+        }
+    Asset:
+      required:
+        - name
+        - description
+        - credentials
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        name:
+          type: string
+          example: Road Salt
+        owner:
+          type: string
+          example: 'did:example:1234'
+          description: 'The identity owning this asset. Typically this will also be the entity issuing the VCs associated with the Asset. In most cases this is a DID associated with an organization'
+        description:
+          type: string
+          example: Road Salt
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/Credential'
+    AssetResponse:
+      type: object
+      properties:
+        asset:
+          $ref: '#/components/schemas/Asset'
+    AssetsResponse:
+      type: object
+      properties:
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    Asset:
+      description: Asset object that needs to be added
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Asset'
+  securitySchemes:
+    dpp_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://auth.demo.sphereon.com/oauth/authorize
+          scopes:
+            write:assets: modify assets in your account
+            read:assets: read your assets

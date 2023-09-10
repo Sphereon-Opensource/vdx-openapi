@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>evco</artifactId>
+
+  <build>
+    <pluginManagement>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <configuration>
+              <addCompileSourceRoot>true</addCompileSourceRoot>
+              <apiPackage>com.sphereon.dpp.assets.api</apiPackage>
+              <artifactVersion>${project.version}</artifactVersion>
+
+              <artifactVersion>${project.version}</artifactVersion>
+              <configOptions>
+                <documentationProvider>springfox</documentationProvider>
+                <serializableModel>true</serializableModel>
+                <snapshotVersion>true</snapshotVersion>
+              </configOptions>
+
+              <enablePostProcessFile>true</enablePostProcessFile>
+              <generateApis>true</generateApis>
+              <generateModelDocumentation>true</generateModelDocumentation>
+              <generateModels>true</generateModels>
+
+              <generateSupportingFiles>true</generateSupportingFiles>
+              <generatorName>spring</generatorName>
+
+              <ignoreFileOverride>${project.basedir}/target/generated-sources/java/api/.swagger-codegen-ignore</ignoreFileOverride>
+              <importMappings>
+                <importMapping>java.time.OffsetDateTime=java.time.Instant</importMapping>
+              </importMappings>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+
+              <invokerPackage>com.sphereon.dpp.assets.handler</invokerPackage>
+              <modelPackage>com.sphereon.dpp.assets.model</modelPackage>
+              <output>${project.basedir}/target/sdks/java/api</output>
+
+              <skipOverwrite>false</skipOverwrite>
+              <typeMappings>
+                <typeMapping>OffsetDateTime=Instant</typeMapping>
+              </typeMappings>
+              <verbose>${openapi-codegen-verbose}</verbose>
+            </configuration>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <id>spring-server</id>
+          </execution>
+
+        </executions>
+        <groupId>org.openapitools</groupId>
+        <version>${openapi-generator-version}</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <proc>none</proc>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.8.1</version>
+      </plugin>
+    </plugins>
+  </build>
+
+  <description>Digital Product Passport - Assets Openapi.</description>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Digital Product Passport Assets Openapi</name>
+
+  <parent>
+    <artifactId>vdx-parent</artifactId>
+    <groupId>com.sphereon.dpp</groupId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven-central</id>
+      <name>Maven Central</name>
+      <url>https://repo1.maven.org/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <properties>
+    <jackson-databind.version>0.2.1</jackson-databind.version>
+
+    <java.version>11</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+
+    <openapi-codegen-verbose>false</openapi-codegen-verbose>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <springfox-swagger.version>3.0.0</springfox-swagger.version>
+  </properties>
+</project>

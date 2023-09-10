@@ -57,6 +57,7 @@
     <module>evco</module>
     <module>edido</module>
     <module>ecmo</module>
+    <module>dpp-assets</module>
   </modules>
   <name>Verifiable Data Exchange Parent Project</name>
   <packaging>pom</packaging>
