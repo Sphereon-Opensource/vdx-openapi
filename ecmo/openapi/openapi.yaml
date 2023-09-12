@@ -1213,8 +1213,9 @@ components:
         partyType:
           $ref: '#/components/schemas/PartyType'
         relationships:
-          type: string
-          example: ''
+          type: array
+          items:
+            $ref: '#/components/schemas/PartyRelationship'
         createdAt:
           type: string
           format: date-time
