@@ -77,7 +77,7 @@
   <distributionManagement>
     <repository>
       <id>sphereon-opensource-releases</id>
-      <url>https://nexus.sphereon.com/repository/sphereon-opensource-releases</url>
+      <url>https://nexus.sphereon.com/repository/sphereon-opensource-snapshots</url>
     </repository>
   </distributionManagement>
 
