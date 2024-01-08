@@ -74,6 +74,13 @@
     </pluginRepository>
   </pluginRepositories>
 
+  <distributionManagement>
+    <repository>
+      <id>sphereon-opensource-releases</id>
+      <url>https://nexus.sphereon.com/repository/sphereon-opensource-releases</url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <openapi-codegen-verbose>false</openapi-codegen-verbose>
     <openapi-generator-version>7.0.1-SNAPSHOT</openapi-generator-version>
