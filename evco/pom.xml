@@ -10,6 +10,8 @@
     <plugins>
       <plugin>
         <artifactId>openapi-generator-maven-plugin</artifactId>
+        <groupId>org.openapitools</groupId>
+        <version>${openapi-generator-version}</version>
         <executions>
           <execution>
             <configuration>
@@ -55,18 +57,16 @@
           </execution>
 
         </executions>
-        <groupId>org.openapitools</groupId>
-        <version>${openapi-generator-version}</version>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <proc>none</proc>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.8.1</version>
+        <version>${maven-compiler-plugin-version}</version>
       </plugin>
     </plugins>
   </build>
@@ -92,9 +92,7 @@
   <properties>
     <jackson-databind.version>0.2.1</jackson-databind.version>
 
-    <java.version>11</java.version>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <java.version>17</java.version>
 
     <openapi-codegen-verbose>false</openapi-codegen-verbose>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
