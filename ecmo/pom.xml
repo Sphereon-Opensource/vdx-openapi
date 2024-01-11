@@ -4,6 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>ecmo</artifactId>
 
+  <properties>
+    <jackson-databind.version>0.2.1</jackson-databind.version>
+    <openapi-codegen-verbose>false</openapi-codegen-verbose>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <springfox-swagger.version>3.0.0</springfox-swagger.version>
+  </properties>
   <build>
     <pluginManagement>
     </pluginManagement>
@@ -11,6 +17,27 @@
       <plugin>
         <artifactId>openapi-generator-maven-plugin</artifactId>
         <executions>
+          <execution>
+            <configuration>
+              <additionalProperties>
+                <npmName>@sphereon/vdx.ecmo</npmName>
+                <npmVersion>9.5.1</npmVersion>
+              </additionalProperties>
+              <apiPackage>api</apiPackage>
+              <configOptions>
+                <npmName>@sphereon/vdx.ecmo</npmName>
+                <npmVersion>9.5.1</npmVersion>
+              </configOptions>
+              <generatorName>typescript-fetch</generatorName>
+              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+              <modelPackage>models</modelPackage>
+              <output>${project.build.directory}/sdks/typescript</output>
+            </configuration>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <id>generate-typescript</id>
+          </execution>
           <execution>
             <configuration>
               <configOptions>
@@ -64,39 +91,11 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <proc>none</proc>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
         </configuration>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.8.1</version>
-      </plugin>
-      <plugin>
-        <artifactId>openapi-generator-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <configuration>
-              <additionalProperties>
-                <npmName>@sphereon/vdx.ecmo</npmName>
-                <npmVersion>9.5.1</npmVersion>
-              </additionalProperties>
-              <apiPackage>api</apiPackage>
-              <configOptions>
-                <npmName>@sphereon/vdx.ecmo</npmName>
-                <npmVersion>9.5.1</npmVersion>
-              </configOptions>
-              <generatorName>typescript-fetch</generatorName>
-              <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
-              <modelPackage>models</modelPackage>
-              <output>${project.build.directory}/sdks/typescript</output>
-            </configuration>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <id>generate-typescript</id>
-          </execution>
-        </executions>
-        <groupId>org.openapitools</groupId>
-        <version>${openapi-generator-version}</version>
+        <version>${maven-compiler-plugin-version}</version>
       </plugin>
     </plugins>
   </build>
@@ -118,16 +117,4 @@
       <url>https://repo1.maven.org/maven2/</url>
     </pluginRepository>
   </pluginRepositories>
-
-  <properties>
-    <jackson-databind.version>0.2.1</jackson-databind.version>
-
-    <java.version>11</java.version>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-
-    <openapi-codegen-verbose>false</openapi-codegen-verbose>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <springfox-swagger.version>3.0.0</springfox-swagger.version>
-  </properties>
 </project>
