@@ -21,7 +21,7 @@
                 <artifactVersion>${project.version}</artifactVersion>
 
                 <artifactVersion>${project.version}</artifactVersion>
-                <documentationProvider>springfox</documentationProvider>
+                <documentationProvider>springdoc</documentationProvider>
 
                 <enablePostProcessFile>true</enablePostProcessFile>
                 <generateApis>true</generateApis>

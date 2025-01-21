@@ -21,7 +21,7 @@
 
               <artifactVersion>${project.version}</artifactVersion>
               <configOptions>
-                <documentationProvider>springfox</documentationProvider>
+                <documentationProvider>springdoc</documentationProvider>
                 <serializableModel>true</serializableModel>
                 <snapshotVersion>true</snapshotVersion>
               </configOptions>

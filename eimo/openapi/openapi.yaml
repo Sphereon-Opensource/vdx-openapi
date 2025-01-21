@@ -720,6 +720,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
       required:
         - name
       example:
@@ -742,6 +746,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
       required:
         - name
       example:
@@ -768,6 +776,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleResponse'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
         createdAt:
           type: string
           format: date-time
@@ -866,6 +878,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
       required:
         - id
         - editUsernameAllowed
@@ -973,6 +989,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleResponse'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
       required:
         - roles
       example:
@@ -1026,6 +1046,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
       required:
         - username
         - email
@@ -1062,6 +1086,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute'
       required:
         - id
         - username
@@ -1135,5 +1163,47 @@ components:
             enabled: true
             createdAt: '2023-01-20T11:12:28Z'
             updatedAt: '2023-01-25T12:00:33Z'
+    Attribute:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+            - type: integer
+            - type: object
+            - type: array
+              items:
+                $ref: '#/components/schemas/Attribute'
+      required:
+        - key
+        - value
+      example:
+        - key: "firstName"
+          value: "John"
+        - key: "verified"
+          value: true
+        - key: "preferences"
+          value: {
+            "language": "en-US",
+            "theme": "dark",
+            "notifications": {
+              "email": true,
+              "push": false
+            }
+          }
+        - key: "security"
+          value:
+            - key: "mfa"
+              value:
+                - key: "enabled"
+                  value: true
+                - key: "method"
+                  value: "authenticator"
+            - key: "accessLevel"
+              value: 3
 security:
   - access_token: [ ]
