@@ -13,7 +13,29 @@
         <groupId>org.openapitools</groupId>
         <version>${openapi-generator-version}</version>
         <executions>
-          <execution>
+            <execution>
+                <configuration>
+                    <additionalProperties>
+                        <npmName>@sphereon/vdx.edido</npmName>
+                        <npmVersion>9.6.0</npmVersion>
+                    </additionalProperties>
+                    <apiPackage>api</apiPackage>
+                    <configOptions>
+                        <npmName>@sphereon/vdx.edido</npmName>
+                        <npmVersion>9.6.0</npmVersion>
+                    </configOptions>
+                    <generatorName>typescript-fetch</generatorName>
+                    <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+                    <modelPackage>models</modelPackage>
+                    <output>${project.build.directory}/sdks/typescript</output>
+                </configuration>
+                <goals>
+                    <goal>generate</goal>
+                </goals>
+                <id>generate-typescript</id>
+            </execution>
+
+            <execution>
             <configuration>
               <configOptions>
                 <addCompileSourceRoot>true</addCompileSourceRoot>

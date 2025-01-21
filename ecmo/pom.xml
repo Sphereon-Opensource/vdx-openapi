@@ -21,12 +21,12 @@
             <configuration>
               <additionalProperties>
                 <npmName>@sphereon/vdx.ecmo</npmName>
-                <npmVersion>9.5.1</npmVersion>
+                <npmVersion>9.6.0</npmVersion>
               </additionalProperties>
               <apiPackage>api</apiPackage>
               <configOptions>
                 <npmName>@sphereon/vdx.ecmo</npmName>
-                <npmVersion>9.5.1</npmVersion>
+                <npmVersion>9.6.0</npmVersion>
               </configOptions>
               <generatorName>typescript-fetch</generatorName>
               <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
