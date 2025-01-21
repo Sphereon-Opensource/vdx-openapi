@@ -721,9 +721,8 @@ components:
           items:
             $ref: '#/components/schemas/UserResponse'
         attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attribute'
+          type: object
+          additionalProperties: true
       required:
         - name
       example:
@@ -732,6 +731,30 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: cdr6e02a-3b9a-11eb-adc1-0242ac120002
+        attributes:
+          - key: "firstName"
+            value: "John"
+          - key: "verified"
+            value: true
+          - key: "preferences"
+            value: {
+              "language": "en-US",
+              "theme": "dark",
+              "notifications": {
+                "email": true,
+                "push": false
+              }
+            }
+          - key: "security"
+            value:
+              - key: "mfa"
+                value:
+                  - key: "enabled"
+                    value: true
+                  - key: "method"
+                    value: "authenticator"
+              - key: "accessLevel"
+                value: 3
     GroupUpdate:
       type: object
       properties:
@@ -747,9 +770,8 @@ components:
           items:
             $ref: '#/components/schemas/UserResponse'
         attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attribute'
+          type: object
+          additionalProperties: true
       required:
         - name
       example:
@@ -758,6 +780,30 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003s
+        attributes:
+          - key: "firstName"
+            value: "John"
+          - key: "verified"
+            value: true
+          - key: "preferences"
+            value: {
+              "language": "en-US",
+              "theme": "dark",
+              "notifications": {
+                "email": true,
+                "push": false
+              }
+            }
+          - key: "security"
+            value:
+              - key: "mfa"
+                value:
+                  - key: "enabled"
+                    value: true
+                  - key: "method"
+                    value: "authenticator"
+              - key: "accessLevel"
+                value: 3
     GroupResponse:
       type: object
       description: Group response
@@ -777,9 +823,8 @@ components:
           items:
             $ref: '#/components/schemas/RoleResponse'
         attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attribute'
+          type: object
+          additionalProperties: true
         createdAt:
           type: string
           format: date-time
@@ -811,6 +856,30 @@ components:
             description: manager of the users
             createdAt: '2023-01-20T09:14:11Z'
             updatedAt: '2023-01-25T10:01:33Z'
+        attributes:
+          - key: "firstName"
+            value: "John"
+          - key: "verified"
+            value: true
+          - key: "preferences"
+            value: {
+              "language": "en-US",
+              "theme": "dark",
+              "notifications": {
+                "email": true,
+                "push": false
+              }
+            }
+          - key: "security"
+            value:
+              - key: "mfa"
+                value:
+                  - key: "enabled"
+                    value: true
+                  - key: "method"
+                    value: "authenticator"
+              - key: "accessLevel"
+                value: 3
     GroupsResponse:
       type: object
       properties:
@@ -879,9 +948,8 @@ components:
           items:
             $ref: '#/components/schemas/GroupResponse'
         attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attribute'
+          type: object
+          additionalProperties: true
       required:
         - id
         - editUsernameAllowed
@@ -990,9 +1058,8 @@ components:
           items:
             $ref: '#/components/schemas/RoleResponse'
         attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attribute'
+          type: object
+          additionalProperties: true
       required:
         - roles
       example:
@@ -1027,6 +1094,30 @@ components:
                 enabled: true
                 createdAt: '2023-01-26T11:02:47Z'
                 updatedAt: '2023-01-26T11:02:47Z'
+        attributes:
+          - key: "firstName"
+            value: "John"
+          - key: "verified"
+            value: true
+          - key: "preferences"
+            value: {
+              "language": "en-US",
+              "theme": "dark",
+              "notifications": {
+                "email": true,
+                "push": false
+              }
+            }
+          - key: "security"
+            value:
+              - key: "mfa"
+                value:
+                  - key: "enabled"
+                    value: true
+                  - key: "method"
+                    value: "authenticator"
+              - key: "accessLevel"
+                value: 3
     UserCreateOrUpdate:
       type: object
       properties:
@@ -1047,9 +1138,8 @@ components:
           items:
             $ref: '#/components/schemas/GroupResponse'
         attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attribute'
+          type: object
+          additionalProperties: true
       required:
         - username
         - email
@@ -1087,9 +1177,8 @@ components:
           items:
             $ref: '#/components/schemas/GroupResponse'
         attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attribute'
+          type: object
+          additionalProperties: true
       required:
         - id
         - username
@@ -1126,6 +1215,30 @@ components:
             name: developers
             createdAt: '2023-01-20T09:12:28Z'
             updatedAt: '2023-01-25T14:00:33Z'
+        attributes:
+          - key: "firstName"
+            value: "John"
+          - key: "verified"
+            value: true
+          - key: "preferences"
+            value: {
+              "language": "en-US",
+              "theme": "dark",
+              "notifications": {
+                "email": true,
+                "push": false
+              }
+            }
+          - key: "security"
+            value:
+              - key: "mfa"
+                value:
+                  - key: "enabled"
+                    value: true
+                  - key: "method"
+                    value: "authenticator"
+              - key: "accessLevel"
+                value: 3
     UsersResponse:
       type: object
       properties:
@@ -1163,47 +1276,5 @@ components:
             enabled: true
             createdAt: '2023-01-20T11:12:28Z'
             updatedAt: '2023-01-25T12:00:33Z'
-    Attribute:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          oneOf:
-            - type: string
-            - type: number
-            - type: boolean
-            - type: integer
-            - type: object
-            - type: array
-              items:
-                $ref: '#/components/schemas/Attribute'
-      required:
-        - key
-        - value
-      example:
-        - key: "firstName"
-          value: "John"
-        - key: "verified"
-          value: true
-        - key: "preferences"
-          value: {
-            "language": "en-US",
-            "theme": "dark",
-            "notifications": {
-              "email": true,
-              "push": false
-            }
-          }
-        - key: "security"
-          value:
-            - key: "mfa"
-              value:
-                - key: "enabled"
-                  value: true
-                - key: "method"
-                  value: "authenticator"
-            - key: "accessLevel"
-              value: 3
 security:
   - access_token: [ ]
