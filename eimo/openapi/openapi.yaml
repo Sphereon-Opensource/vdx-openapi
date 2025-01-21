@@ -737,14 +737,11 @@ components:
           preferences:
             language: "en-US"
             theme: "dark"
+            accessLevel: 3
             notifications:
               email: true
               push: false
-          security:
-            mfa:
-              enabled: true
-              method: "authenticator"
-            accessLevel: 3
+
     GroupUpdate:
       type: object
       properties:
@@ -776,14 +773,11 @@ components:
           preferences:
             language: "en-US"
             theme: "dark"
+            accessLevel: 3
             notifications:
               email: true
               push: false
-          security:
-            mfa:
-              enabled: true
-              method: "authenticator"
-            accessLevel: 3
+
     GroupResponse:
       type: object
       description: Group response
@@ -842,14 +836,11 @@ components:
           preferences:
             language: "en-US"
             theme: "dark"
+            accessLevel: 3
             notifications:
               email: true
               push: false
-          security:
-            mfa:
-              enabled: true
-              method: "authenticator"
-            accessLevel: 3
+
     GroupsResponse:
       type: object
       properties:
@@ -1070,14 +1061,11 @@ components:
           preferences:
             language: "en-US"
             theme: "dark"
+            accessLevel: 3
             notifications:
               email: true
               push: false
-          security:
-            mfa:
-              enabled: true
-              method: "authenticator"
-            accessLevel: 3
+
     UserCreateOrUpdate:
       type: object
       properties:
@@ -1181,14 +1169,11 @@ components:
           preferences:
             language: "en-US"
             theme: "dark"
+            accessLevel: 3
             notifications:
               email: true
               push: false
-          security:
-            mfa:
-              enabled: true
-              method: "authenticator"
-            accessLevel: 3
+
     UsersResponse:
       type: object
       properties:
