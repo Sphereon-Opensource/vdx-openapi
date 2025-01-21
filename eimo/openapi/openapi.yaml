@@ -1333,6 +1333,5 @@ components:
             enabled: true
             createdAt: '2023-01-20T11:12:28Z'
             updatedAt: '2023-01-25T12:00:33Z'
-
 security:
   - access_token: [ ]
