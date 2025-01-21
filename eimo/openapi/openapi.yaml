@@ -721,9 +721,18 @@ components:
           items:
             $ref: '#/components/schemas/UserResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - name
       example:
@@ -732,6 +741,16 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: cdr6e02a-3b9a-11eb-adc1-0242ac120002
+        metadata:
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            accessLevel: 3
+            notifications:
+              email: true
+              push: false
 
     GroupUpdate:
       type: object
@@ -748,9 +767,18 @@ components:
           items:
             $ref: '#/components/schemas/UserResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - name
       example:
@@ -759,6 +787,16 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003s
+        metadata:
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            accessLevel: 3
+            notifications:
+              email: true
+              push: false
 
     GroupResponse:
       type: object
@@ -779,9 +817,18 @@ components:
           items:
             $ref: '#/components/schemas/RoleResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
         createdAt:
           type: string
           format: date-time
@@ -813,6 +860,16 @@ components:
             description: manager of the users
             createdAt: '2023-01-20T09:14:11Z'
             updatedAt: '2023-01-25T10:01:33Z'
+        metadata:
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            accessLevel: 3
+            notifications:
+              email: true
+              push: false
 
     GroupsResponse:
       type: object
@@ -882,9 +939,18 @@ components:
           items:
             $ref: '#/components/schemas/GroupResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - id
         - editUsernameAllowed
@@ -910,9 +976,15 @@ components:
         createdAt: '2023-01-25T10:01:33Z'
         updatedAt: '2023-01-25T10:01:33Z'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            accessLevel: 3
+            notifications:
+              email: true
+              push: false
     RealmCreateOrUpdate:
       type: object
       properties:
@@ -938,9 +1010,18 @@ components:
             - AZURE
             - VDX
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - enabled
         - name
@@ -954,9 +1035,18 @@ components:
           type: string
           example: manager of the company
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - name
     RoleResponse:
@@ -984,9 +1074,18 @@ components:
           items:
             $ref: '#/components/schemas/UserResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - id
       example:
@@ -1009,9 +1108,18 @@ components:
           items:
             $ref: '#/components/schemas/RoleResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+              firstName: "John"
+              verified: true
+              preferences:
+                language: "en-US"
+                theme: "dark"
+                accessLevel: 3
+                notifications:
+                  email: true
+                  push: false
       required:
         - roles
       example:
@@ -1067,9 +1175,18 @@ components:
           items:
             $ref: '#/components/schemas/GroupResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - username
         - email
@@ -1107,9 +1224,18 @@ components:
           items:
             $ref: '#/components/schemas/GroupResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - id
         - username
@@ -1146,6 +1272,16 @@ components:
             name: developers
             createdAt: '2023-01-20T09:12:28Z'
             updatedAt: '2023-01-25T14:00:33Z'
+        metadata:
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            accessLevel: 3
+            notifications:
+              email: true
+              push: false
 
     UsersResponse:
       type: object
@@ -1157,9 +1293,18 @@ components:
           items:
             $ref: '#/components/schemas/UserResponse'
         metadata:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomAttribute'
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - users
       example:
@@ -1188,12 +1333,5 @@ components:
             enabled: true
             createdAt: '2023-01-20T11:12:28Z'
             updatedAt: '2023-01-25T12:00:33Z'
-    CustomAttribute:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: object
 security:
   - access_token: [ ]
