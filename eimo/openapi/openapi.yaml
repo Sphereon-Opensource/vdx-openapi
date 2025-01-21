@@ -732,29 +732,19 @@ components:
         users:
           - id: cdr6e02a-3b9a-11eb-adc1-0242ac120002
         attributes:
-          - key: "firstName"
-            value: "John"
-          - key: "verified"
-            value: true
-          - key: "preferences"
-            value: {
-              "language": "en-US",
-              "theme": "dark",
-              "notifications": {
-                "email": true,
-                "push": false
-              }
-            }
-          - key: "security"
-            value:
-              - key: "mfa"
-                value:
-                  - key: "enabled"
-                    value: true
-                  - key: "method"
-                    value: "authenticator"
-              - key: "accessLevel"
-                value: 3
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            notifications:
+              email: true
+              push: false
+          security:
+            mfa:
+              enabled: true
+              method: "authenticator"
+            accessLevel: 3
     GroupUpdate:
       type: object
       properties:
@@ -781,29 +771,19 @@ components:
         users:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003s
         attributes:
-          - key: "firstName"
-            value: "John"
-          - key: "verified"
-            value: true
-          - key: "preferences"
-            value: {
-              "language": "en-US",
-              "theme": "dark",
-              "notifications": {
-                "email": true,
-                "push": false
-              }
-            }
-          - key: "security"
-            value:
-              - key: "mfa"
-                value:
-                  - key: "enabled"
-                    value: true
-                  - key: "method"
-                    value: "authenticator"
-              - key: "accessLevel"
-                value: 3
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            notifications:
+              email: true
+              push: false
+          security:
+            mfa:
+              enabled: true
+              method: "authenticator"
+            accessLevel: 3
     GroupResponse:
       type: object
       description: Group response
@@ -857,29 +837,19 @@ components:
             createdAt: '2023-01-20T09:14:11Z'
             updatedAt: '2023-01-25T10:01:33Z'
         attributes:
-          - key: "firstName"
-            value: "John"
-          - key: "verified"
-            value: true
-          - key: "preferences"
-            value: {
-              "language": "en-US",
-              "theme": "dark",
-              "notifications": {
-                "email": true,
-                "push": false
-              }
-            }
-          - key: "security"
-            value:
-              - key: "mfa"
-                value:
-                  - key: "enabled"
-                    value: true
-                  - key: "method"
-                    value: "authenticator"
-              - key: "accessLevel"
-                value: 3
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            notifications:
+              email: true
+              push: false
+          security:
+            mfa:
+              enabled: true
+              method: "authenticator"
+            accessLevel: 3
     GroupsResponse:
       type: object
       properties:
@@ -1095,29 +1065,19 @@ components:
                 createdAt: '2023-01-26T11:02:47Z'
                 updatedAt: '2023-01-26T11:02:47Z'
         attributes:
-          - key: "firstName"
-            value: "John"
-          - key: "verified"
-            value: true
-          - key: "preferences"
-            value: {
-              "language": "en-US",
-              "theme": "dark",
-              "notifications": {
-                "email": true,
-                "push": false
-              }
-            }
-          - key: "security"
-            value:
-              - key: "mfa"
-                value:
-                  - key: "enabled"
-                    value: true
-                  - key: "method"
-                    value: "authenticator"
-              - key: "accessLevel"
-                value: 3
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            notifications:
+              email: true
+              push: false
+          security:
+            mfa:
+              enabled: true
+              method: "authenticator"
+            accessLevel: 3
     UserCreateOrUpdate:
       type: object
       properties:
@@ -1216,29 +1176,19 @@ components:
             createdAt: '2023-01-20T09:12:28Z'
             updatedAt: '2023-01-25T14:00:33Z'
         attributes:
-          - key: "firstName"
-            value: "John"
-          - key: "verified"
-            value: true
-          - key: "preferences"
-            value: {
-              "language": "en-US",
-              "theme": "dark",
-              "notifications": {
-                "email": true,
-                "push": false
-              }
-            }
-          - key: "security"
-            value:
-              - key: "mfa"
-                value:
-                  - key: "enabled"
-                    value: true
-                  - key: "method"
-                    value: "authenticator"
-              - key: "accessLevel"
-                value: 3
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            notifications:
+              email: true
+              push: false
+          security:
+            mfa:
+              enabled: true
+              method: "authenticator"
+            accessLevel: 3
     UsersResponse:
       type: object
       properties:
