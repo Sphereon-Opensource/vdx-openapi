@@ -723,6 +723,16 @@ components:
         customAttributes:
           type: object
           additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - name
       example:
@@ -759,6 +769,16 @@ components:
         customAttributes:
           type: object
           additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - name
       example:
@@ -799,6 +819,16 @@ components:
         customAttributes:
           type: object
           additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
         createdAt:
           type: string
           format: date-time
@@ -911,6 +941,16 @@ components:
         customAttributes:
           type: object
           additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - id
         - editUsernameAllowed
@@ -935,6 +975,16 @@ components:
         realmManagementPolicy: VDXONIAM
         createdAt: '2023-01-25T10:01:33Z'
         updatedAt: '2023-01-25T10:01:33Z'
+        customAttributes:
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            accessLevel: 3
+            notifications:
+              email: true
+              push: false
     RealmCreateOrUpdate:
       type: object
       properties:
@@ -959,6 +1009,19 @@ components:
           enum:
             - AZURE
             - VDX
+        customAttributes:
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - enabled
         - name
@@ -971,6 +1034,19 @@ components:
         description:
           type: string
           example: manager of the company
+        customAttributes:
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - name
     RoleResponse:
@@ -997,6 +1073,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
+        customAttributes:
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - id
       example:
@@ -1021,6 +1110,16 @@ components:
         customAttributes:
           type: object
           additionalProperties: true
+          example:
+              firstName: "John"
+              verified: true
+              preferences:
+                language: "en-US"
+                theme: "dark"
+                accessLevel: 3
+                notifications:
+                  email: true
+                  push: false
       required:
         - roles
       example:
@@ -1055,16 +1154,6 @@ components:
                 enabled: true
                 createdAt: '2023-01-26T11:02:47Z'
                 updatedAt: '2023-01-26T11:02:47Z'
-        customAttributes:
-          firstName: "John"
-          verified: true
-          preferences:
-            language: "en-US"
-            theme: "dark"
-            accessLevel: 3
-            notifications:
-              email: true
-              push: false
 
     UserCreateOrUpdate:
       type: object
@@ -1088,6 +1177,16 @@ components:
         customAttributes:
           type: object
           additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - username
         - email
@@ -1127,6 +1226,16 @@ components:
         customAttributes:
           type: object
           additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - id
         - username
@@ -1183,6 +1292,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
+        customAttributes:
+          type: object
+          additionalProperties: true
+          example:
+            firstName: "John"
+            verified: true
+            preferences:
+              language: "en-US"
+              theme: "dark"
+              accessLevel: 3
+              notifications:
+                email: true
+                push: false
       required:
         - users
       example:
