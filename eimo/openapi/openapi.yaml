@@ -720,7 +720,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -741,7 +741,7 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: cdr6e02a-3b9a-11eb-adc1-0242ac120002
-        customAttributes:
+        metadata:
           firstName: "John"
           verified: true
           preferences:
@@ -766,7 +766,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -787,7 +787,7 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003s
-        customAttributes:
+        metadata:
           firstName: "John"
           verified: true
           preferences:
@@ -816,7 +816,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -860,7 +860,7 @@ components:
             description: manager of the users
             createdAt: '2023-01-20T09:14:11Z'
             updatedAt: '2023-01-25T10:01:33Z'
-        customAttributes:
+        metadata:
           firstName: "John"
           verified: true
           preferences:
@@ -938,7 +938,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -975,7 +975,7 @@ components:
         realmManagementPolicy: VDXONIAM
         createdAt: '2023-01-25T10:01:33Z'
         updatedAt: '2023-01-25T10:01:33Z'
-        customAttributes:
+        metadata:
           firstName: "John"
           verified: true
           preferences:
@@ -1009,7 +1009,7 @@ components:
           enum:
             - AZURE
             - VDX
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -1034,7 +1034,7 @@ components:
         description:
           type: string
           example: manager of the company
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -1073,7 +1073,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -1107,7 +1107,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -1174,7 +1174,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -1223,7 +1223,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -1272,7 +1272,7 @@ components:
             name: developers
             createdAt: '2023-01-20T09:12:28Z'
             updatedAt: '2023-01-25T14:00:33Z'
-        customAttributes:
+        metadata:
           firstName: "John"
           verified: true
           preferences:
@@ -1292,7 +1292,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        customAttributes:
+        metadata:
           type: object
           additionalProperties: true
           example:
@@ -1333,5 +1333,6 @@ components:
             enabled: true
             createdAt: '2023-01-20T11:12:28Z'
             updatedAt: '2023-01-25T12:00:33Z'
+
 security:
   - access_token: [ ]
