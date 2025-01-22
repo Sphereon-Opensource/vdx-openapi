@@ -720,8 +720,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - name
       example:
@@ -730,8 +728,6 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: cdr6e02a-3b9a-11eb-adc1-0242ac120002
-        custom:
-          $ref: '#/components/schemas/Custom'
     GroupUpdate:
       type: object
       properties:
@@ -746,8 +742,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - name
       example:
@@ -756,8 +750,6 @@ components:
           - id: ghi6e02a-3b9a-11eb-adc1-0242ac120002
         users:
           - id: 5ac96e2a-06f0-11eb-adc1-0242ac12003s
-        custom:
-          $ref: '#/components/schemas/Custom'
     GroupResponse:
       type: object
       description: Group response
@@ -776,8 +768,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleResponse'
-        custom:
-          $ref: '#/components/schemas/Custom'
         createdAt:
           type: string
           format: date-time
@@ -809,8 +799,6 @@ components:
             description: manager of the users
             createdAt: '2023-01-20T09:14:11Z'
             updatedAt: '2023-01-25T10:01:33Z'
-        custom:
-          $ref: '#/components/schemas/Custom'
     GroupsResponse:
       type: object
       properties:
@@ -878,8 +866,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - id
         - editUsernameAllowed
@@ -904,8 +890,6 @@ components:
         realmManagementPolicy: VDXONIAM
         createdAt: '2023-01-25T10:01:33Z'
         updatedAt: '2023-01-25T10:01:33Z'
-        custom:
-          $ref: '#/components/schemas/Custom'
     RealmCreateOrUpdate:
       type: object
       properties:
@@ -930,8 +914,6 @@ components:
           enum:
             - AZURE
             - VDX
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - enabled
         - name
@@ -944,8 +926,6 @@ components:
         description:
           type: string
           example: manager of the company
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - name
     RoleResponse:
@@ -972,8 +952,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - id
       example:
@@ -995,8 +973,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleResponse'
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - roles
       example:
@@ -1127,8 +1103,6 @@ components:
             name: developers
             createdAt: '2023-01-20T09:12:28Z'
             updatedAt: '2023-01-25T14:00:33Z'
-        custom:
-          $ref: '#/components/schemas/Custom'
     UsersResponse:
       type: object
       properties:
@@ -1138,8 +1112,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserResponse'
-        custom:
-          $ref: '#/components/schemas/Custom'
       required:
         - users
       example:
