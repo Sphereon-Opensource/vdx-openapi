@@ -267,7 +267,7 @@ paths:
   /{realmId}/users:
     get:
       tags:
-        - Users
+        - User
       summary: Get users for a specific realm.
       parameters:
         - name: pageable
@@ -306,7 +306,7 @@ paths:
           description: Range not satisfiable.
     post:
       tags:
-        - Users
+        - User
       summary: Create a user for a specific realm.
       requestBody:
         content:
@@ -332,7 +332,7 @@ paths:
   /{realmId}/users/{userId}:
     get:
       tags:
-        - Users
+        - User
       summary: Get a specific user for a specific realm.
       parameters:
         - name: expand
@@ -353,7 +353,7 @@ paths:
           description: Realm and/or user does not exist.
     put:
       tags:
-        - Users
+        - User
       summary: Update the information of the user.
       requestBody:
         content:
@@ -376,7 +376,7 @@ paths:
           description: Realm and/or user does not exist.
     delete:
       tags:
-        - Users
+        - User
       summary: Delete a specific user.
       responses:
         200:
@@ -389,7 +389,7 @@ paths:
   /{realmId}/users/{userId}/roles:
     put:
       tags:
-        - Users
+        - User
       summary: Add or remove roles from user
       requestBody:
         content:
@@ -414,7 +414,7 @@ paths:
   /{realmId}/users/{userId}/groups:
     put:
       tags:
-        - Users
+        - User
       summary: Add or remove group from user
       requestBody:
         content:
@@ -1007,6 +1007,7 @@ components:
                 enabled: true
                 createdAt: '2023-01-26T11:02:47Z'
                 updatedAt: '2023-01-26T11:02:47Z'
+
     UserCreateOrUpdate:
       type: object
       properties:
@@ -1026,6 +1027,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
+        custom:
+          $ref: '#/components/schemas/Custom'
       required:
         - username
         - email
@@ -1062,6 +1065,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GroupResponse'
+        custom:
+          $ref: '#/components/schemas/Custom'
       required:
         - id
         - username
@@ -1135,5 +1140,13 @@ components:
             enabled: true
             createdAt: '2023-01-20T11:12:28Z'
             updatedAt: '2023-01-25T12:00:33Z'
+    CustomAttributes:
+      type: object
+      additionalProperties: true
+    Custom:
+      type: object
+      properties:
+        attributes:
+          $ref: '#/components/schemas/CustomAttributes'
 security:
   - access_token: [ ]

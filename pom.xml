@@ -18,16 +18,10 @@
       <artifactId>spring-data-commons</artifactId>
       <groupId>org.springframework.data</groupId>
     </dependency>
-    <!--SpringFox dependencies -->
     <dependency>
-      <artifactId>springfox-swagger2</artifactId>
-      <groupId>io.springfox</groupId>
-      <version>${springfox-version}</version>
-    </dependency>
-    <dependency>
-      <artifactId>springfox-swagger-ui</artifactId>
-      <groupId>io.springfox</groupId>
-      <version>${springfox-version}</version>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>1.7.0</version>
     </dependency>
     <dependency>
       <artifactId>jaxb-api</artifactId>
@@ -76,22 +70,21 @@
 
   <distributionManagement>
     <repository>
-      <id>sphereon-opensource-releases</id>
+      <id>sphereon-opensource-snapshots</id>
       <url>https://nexus.sphereon.com/repository/sphereon-opensource-snapshots</url>
     </repository>
   </distributionManagement>
 
   <properties>
     <openapi-codegen-verbose>false</openapi-codegen-verbose>
-    <openapi-generator-version>7.2.0</openapi-generator-version>
+    <openapi-generator-version>7.11.0</openapi-generator-version>
     <maven-compiler-plugin-version>3.9.0</maven-compiler-plugin-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <springfox-version>2.8.0</springfox-version>
     <swagger-annotations-version>1.5.8</swagger-annotations-version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
 
 </project>

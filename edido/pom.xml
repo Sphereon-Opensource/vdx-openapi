@@ -13,15 +13,39 @@
         <groupId>org.openapitools</groupId>
         <version>${openapi-generator-version}</version>
         <executions>
-          <execution>
+            <execution>
+                <configuration>
+                    <additionalProperties>
+                        <npmName>@sphereon/vdx.edido</npmName>
+                        <npmVersion>9.6.0</npmVersion>
+                    </additionalProperties>
+                    <apiPackage>api</apiPackage>
+                    <configOptions>
+                        <npmName>@sphereon/vdx.edido</npmName>
+                        <npmVersion>9.6.0</npmVersion>
+                        <useTags>true</useTags>
+                    </configOptions>
+                    <generatorName>typescript-fetch</generatorName>
+                    <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
+                    <modelPackage>models</modelPackage>
+                    <output>${project.build.directory}/sdks/typescript</output>
+                </configuration>
+                <goals>
+                    <goal>generate</goal>
+                </goals>
+                <id>generate-typescript</id>
+            </execution>
+
+            <execution>
             <configuration>
               <configOptions>
                 <addCompileSourceRoot>true</addCompileSourceRoot>
+                <useTags>true</useTags>
                 <apiPackage>com.sphereon.vdx.edido.handler</apiPackage>
                 <artifactVersion>${project.version}</artifactVersion>
 
                 <artifactVersion>${project.version}</artifactVersion>
-                <documentationProvider>springfox</documentationProvider>
+                <documentationProvider>springdoc</documentationProvider>
 
                 <enablePostProcessFile>true</enablePostProcessFile>
                 <generateApis>true</generateApis>
@@ -78,7 +102,7 @@
   <parent>
     <artifactId>vdx-parent</artifactId>
     <groupId>com.sphereon.vdx</groupId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
   </parent>
 
   <pluginRepositories>
