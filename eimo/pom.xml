@@ -21,6 +21,7 @@
               <configOptions>
                 <npmName>@sphereon/vdx.eimo</npmName>
                 <npmVersion>9.6.0</npmVersion>
+                <useTags>true</useTags>
               </configOptions>
               <generatorName>typescript-fetch</generatorName>
               <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
@@ -36,6 +37,7 @@
             <configuration>
               <configOptions>
                 <addCompileSourceRoot>true</addCompileSourceRoot>
+                <useTags>true</useTags>
                 <apiPackage>com.sphereon.vdx.eimo.handler</apiPackage>
                 <artifactVersion>${project.version}</artifactVersion>
 
@@ -99,7 +101,7 @@
   <parent>
     <artifactId>vdx-parent</artifactId>
     <groupId>com.sphereon.vdx</groupId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
   </parent>
 
   <pluginRepositories>

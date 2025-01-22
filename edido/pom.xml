@@ -100,7 +100,7 @@
   <parent>
     <artifactId>vdx-parent</artifactId>
     <groupId>com.sphereon.vdx</groupId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
   </parent>
 
   <pluginRepositories>
