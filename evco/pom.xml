@@ -21,6 +21,7 @@
 
               <artifactVersion>${project.version}</artifactVersion>
               <configOptions>
+                <useTags>true</useTags>
                 <documentationProvider>springdoc</documentationProvider>
                 <serializableModel>true</serializableModel>
                 <snapshotVersion>true</snapshotVersion>

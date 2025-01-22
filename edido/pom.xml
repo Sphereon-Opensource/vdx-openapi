@@ -23,6 +23,7 @@
                     <configOptions>
                         <npmName>@sphereon/vdx.edido</npmName>
                         <npmVersion>9.6.0</npmVersion>
+                        <useTags>true</useTags>
                     </configOptions>
                     <generatorName>typescript-fetch</generatorName>
                     <inputSpec>${project.basedir}/openapi/openapi.yaml</inputSpec>
@@ -39,6 +40,7 @@
             <configuration>
               <configOptions>
                 <addCompileSourceRoot>true</addCompileSourceRoot>
+                <useTags>true</useTags>
                 <apiPackage>com.sphereon.vdx.edido.handler</apiPackage>
                 <artifactVersion>${project.version}</artifactVersion>
 
