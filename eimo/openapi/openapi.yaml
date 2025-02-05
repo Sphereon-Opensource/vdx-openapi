@@ -1148,5 +1148,16 @@ components:
       properties:
         attributes:
           $ref: '#/components/schemas/CustomAttributes'
+      example:
+        attributes:
+          firstName: "John"
+          verified: true
+          preferences:
+            language: "en-US"
+            theme: "dark"
+            accessLevel: 3
+            notifications:
+              email: true
+              push: false
 security:
   - access_token: [ ]
